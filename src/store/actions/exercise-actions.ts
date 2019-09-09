@@ -4,24 +4,25 @@ import { ThunkAction } from 'redux-thunk';
 import axios from'../../axios';
 import { IExercise } from '../../models/exercise.interface';
 import { AxiosResponse } from 'axios';
+import { ActionTypes } from '../constants';
 
-export interface IGetExercisesRequest extends Action<'GetExercisesRequest'> {}
+export interface IGetExercisesRequest extends Action<ActionTypes.GET_EXERCISES_REQUEST> {}
 
-export interface IGetExercisesSuccess extends Action<'GetExercisesSuccess'> {
+export interface IGetExercisesSuccess extends Action<ActionTypes.GET_EXERCISES_SUCCESS> {
   exercises: IExercise[];
 }
 
-export interface IGetExercisesFail extends Action<'GetExercisesFail'> {
+export interface IGetExercisesFail extends Action<ActionTypes.GET_EXERCISES_FAIL> {
   error: string;
 }
 
-export interface IAddExerciseRequest extends Action<'AddExerciseRequest'> {}
+export interface IAddExerciseRequest extends Action<ActionTypes.ADD_EXERCISE_REQUEST> {}
 
-export interface IAddExerciseSuccess extends Action<'AddExerciseSuccess'> {
+export interface IAddExerciseSuccess extends Action<ActionTypes.ADD_EXERCISE_SUCCESS> {
   exercise: IExercise;
 }
 
-export interface IAddExerciseFail extends Action<'AddExerciseFail'> {
+export interface IAddExerciseFail extends Action<ActionTypes.ADD_EXERCISE_FAIL> {
   error: string;
 }
 
@@ -36,20 +37,20 @@ export const getExercises: ActionCreator<
   return async (dispatch: Dispatch) => {
     try {
       const getExercisesRequest: IGetExercisesRequest = {
-        type: 'GetExercisesRequest',
+        type: ActionTypes.GET_EXERCISES_REQUEST,
       };
       dispatch(getExercisesRequest);
       const response: AxiosResponse = await axios.get('/exercises');
 
       const getExercisesSuccess: IGetExercisesSuccess = {
         exercises: response.data,
-        type: 'GetExercisesSuccess',
+        type: ActionTypes.GET_EXERCISES_SUCCESS,
       };
       return dispatch(getExercisesSuccess);
     } catch(error) {
       const getExercisesFail: IGetExercisesFail = {
         error,
-        type: 'GetExercisesFail',
+        type: ActionTypes.GET_EXERCISES_FAIL,
       };
       return dispatch(getExercisesFail);
     }
@@ -67,19 +68,19 @@ export const addExercise: ActionCreator<
   return async (dispatch: Dispatch) => {
     try {
       const addExerciseRequest: IAddExerciseRequest = {
-        type: 'AddExerciseRequest',
+        type: ActionTypes.ADD_EXERCISE_REQUEST,
       };
       dispatch(addExerciseRequest);
       const response: AxiosResponse = await axios.post('/exercises', newExercise);
       const addExerciseSuccess: IAddExerciseSuccess = {
         exercise: response.data,
-        type: 'AddExerciseSuccess',
+        type: ActionTypes.ADD_EXERCISE_SUCCESS,
       };
       return dispatch(addExerciseSuccess);
     } catch(error) {
       const addExerciseFail: IAddExerciseFail = {
         error,
-        type: 'AddExerciseFail',
+        type: ActionTypes.ADD_EXERCISE_FAIL,
       };
       return dispatch(addExerciseFail);
     }

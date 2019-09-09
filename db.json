@@ -3,92 +3,118 @@
     {
       "id": 1,
       "name": "Жим лежа",
-      "muscleGroup": "Грудь"
+      "muscleGroupId": 1
     },
     {
       "id": 2,
       "name": "Жим лежа на наклонной скамье",
-      "muscleGroup": "Грудь"
+      "muscleGroupId": 1
     },
     {
       "id": 3,
       "name": "Отжимания от брусьев",
-      "muscleGroup": "Грудь"
+      "muscleGroupId": 1
     },
     {
       "id": 4,
       "name": "Вертикальная тяга",
-      "muscleGroup": "Спина"
+      "muscleGroupId": 2
     },
     {
       "id": 5,
       "name": "Горизонтальная тяга",
-      "muscleGroup": "Спина"
+      "muscleGroupId": 2
     },
     {
       "id": 6,
       "name": "Горизонтальная тяга в тренажере",
-      "muscleGroup": "Спина"
+      "muscleGroupId": 2
     },
     {
       "id": 7,
       "name": "Жим гантелей",
-      "muscleGroup": "Плечи"
+      "muscleGroupId": 3
     },
     {
       "id": 8,
       "name": "Боковые подъемы гантелей",
-      "muscleGroup": "Плечи"
+      "muscleGroupId": 3
     },
     {
       "id": 9,
       "name": "Фронтальные подъемы блина",
-      "muscleGroup": "Плечи"
+      "muscleGroupId": 3
     },
     {
       "id": 10,
-      "name": "Подъем штанги",
-      "muscleGroup": "Бицепс"
+      "name": "Скручивания",
+      "muscleGroupId": 4
     },
     {
       "id": 11,
-      "name": "Подъем гантелей",
-      "muscleGroup": "Бицепс"
+      "name": "Скручивания на скамье",
+      "muscleGroupId": 4
     },
     {
       "id": 12,
-      "name": "Концентрированный подъем гантелей",
-      "muscleGroup": "Бицепс"
+      "name": "Скручивания с полнятыми ногами",
+      "muscleGroupId": 4
     },
     {
       "id": 13,
-      "name": "Французский жим с гантелей",
-      "muscleGroup": "Трицепс"
+      "name": "Подъем штанги",
+      "muscleGroupId": 5
     },
     {
       "id": 14,
-      "name": "Жим узким хватом",
-      "muscleGroup": "Трицепс"
+      "name": "Подъем гантелей",
+      "muscleGroupId": 5
     },
     {
       "id": 15,
-      "name": "Разгибания рук в тренажере",
-      "muscleGroup": "Трицепс"
+      "name": "Концентрированный подъем гантелей",
+      "muscleGroupId": 5
     },
     {
       "id": 16,
-      "name": "Скручивания",
-      "muscleGroup": "Пресс"
+      "name": "Французский жим с гантелей",
+      "muscleGroupId": 6
     },
     {
       "id": 17,
-      "name": "Скручивания на скамье",
-      "muscleGroup": "Пресс"
+      "name": "Жим узким хватом",
+      "muscleGroupId": 6
     },
     {
       "id": 18,
-      "name": "Скручивания с полнятыми ногами",
-      "muscleGroup": "Пресс"
+      "name": "Разгибания рук в тренажере",
+      "muscleGroupId": 6
+    }
+  ],
+  "muscle-groups": [
+    {
+      "id": 1,
+      "name": "Грудь"
+    },
+    {
+      "id": 2,
+      "name": "Спина"
+    },
+    {
+      "id": 3,
+      "name": "Плечи"
+    },
+    {
+      "id": 4,
+      "name": "Пресс"
+    },
+    {
+      "id": 5,
+      "name": "Бицепс"
+    },
+    {
+      "id": 6,
+      "name": "Трицепс"
     }
   ]
 }

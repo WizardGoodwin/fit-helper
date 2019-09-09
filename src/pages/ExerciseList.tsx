@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
@@ -15,17 +15,26 @@ import {
   getExercises,
   IGetExercisesFail,
   IGetExercisesSuccess
-} from '../store/actions/exerciseActions';
+} from '../store/actions/exercise-actions';
 import { IExercise } from '../models/exercise.interface';
 import Spinner from '../shared/Spinner/Spinner';
 import { IState } from '../store/reducers';
+import {
+  getMuscleGroups,
+  IGetMuscleGroupsFail,
+  IGetMuscleGroupsSuccess
+} from '../store/actions/muscle-group-actions';
+import { IMuscleGroup } from '../models/muscle-group.interface';
 
 
 
 interface IProps {
-  getExercises: () => Promise<IGetExercisesSuccess | IGetExercisesFail>;
   exercises: IExercise[];
-  loading: boolean;
+  muscleGroups: IMuscleGroup[];
+  exercisesLoading: boolean;
+  muscleGroupsLoading: boolean;
+  getExercises: () => Promise<IGetExercisesSuccess | IGetExercisesFail>;
+  getMuscleGroups: () => Promise<IGetMuscleGroupsSuccess | IGetMuscleGroupsFail>;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -76,69 +85,76 @@ const ExpansionPanelDetails = withStyles((theme: Theme) => ({
   },
 }))(MuiExpansionPanelDetails);
 
-const muscleGroupList = ['Грудь', 'Спина', 'Плечи', 'Пресс', 'Бицепс', 'Трицепс'];
+const ExerciseList: FC<IProps> = (
+  { exercises, muscleGroups, exercisesLoading, muscleGroupsLoading, getExercises, getMuscleGroups}
+  ) => {
 
-const ExerciseList: FC<IProps> = ({ exercises, loading, getExercises }) => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = useState<string | false>('');
+  const [expanded, setExpanded] = useState<number | false>(false);
 
   useEffect(() => {
     getExercises();
+    getMuscleGroups();
   }, []);
 
-  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
-    setExpanded(newExpanded ? panel : false);
+  const handleChange = (id: number) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
+    setExpanded(newExpanded ? id : false);
   };
 
   return (
     <>
-      {loading && <Spinner />}
+      {(exercisesLoading || muscleGroupsLoading) && <Spinner />}
       <Grid container className={classes.mainGrid}>
         <Typography variant="h5" gutterBottom>
           Список упражнений
         </Typography>
         <Divider />
-        {muscleGroupList.map((group: string) => {
-          return (
-            <ExpansionPanel
-              square expanded={expanded === group}
-              onChange={handleChange(group)} key={group}
-            >
-              <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-                <Typography>{group}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <List>
-                  {exercises.filter((item: IExercise) => item.muscleGroup === group)
-                            .map((item: IExercise) => {
-                              return (
-                                <ListItem key={item.id}>
-                                  {item.name}
-                                </ListItem>
-                              )
-                            })
-                  }
-                </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          )
+        {muscleGroups.map((group: IMuscleGroup) => {
+          if (group && group.id) {
+            return (
+              <ExpansionPanel
+                square expanded={expanded === group.id}
+                onChange={handleChange(group.id)} key={group.id}
+              >
+                <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
+                  <Typography>{group.name}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List>
+                    {exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
+                      .map((item: IExercise) => {
+                        return (
+                          <ListItem key={item.id}>
+                            {item.name}
+                          </ListItem>
+                        )
+                      })
+                    }
+                  </List>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            )
+          }
         })}
       </Grid>
     </>
   );
 };
 
-const mapStateToProps = ({ exerciseState }: IState) => {
+const mapStateToProps = ({ exerciseState, muscleGroupState }: IState) => {
   return {
     exercises: exerciseState.exercises,
-    peopleLoading: exerciseState.loading
+    exercisesLoading: exerciseState.loading,
+    muscleGroups: muscleGroupState.muscleGroups,
+    muscleGroupsLoading: muscleGroupState.loading,
   };
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     getExercises: () => dispatch(getExercises()),
+    getMuscleGroups: () => dispatch(getMuscleGroups()),
   };
 };
 

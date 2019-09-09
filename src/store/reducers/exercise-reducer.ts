@@ -1,6 +1,7 @@
 import { IExercise } from '../../models/exercise.interface';
 import { Reducer } from 'redux';
-import { ExerciseActions } from '../actions/exerciseActions';
+import { ExerciseActions } from '../actions/exercise-actions';
+import { ActionTypes } from '../constants';
 
 export interface IExercisesState {
   exercises: IExercise[];
@@ -19,35 +20,35 @@ const exerciseReducer: Reducer<IExercisesState, ExerciseActions> = (
   action
 ) => {
   switch (action.type) {
-    case 'GetExercisesRequest': {
+    case ActionTypes.GET_EXERCISES_REQUEST: {
       return {
         ...state,
         loading: true,
         error: null
       };
     }
-    case 'GetExercisesSuccess': {
+    case ActionTypes.GET_EXERCISES_SUCCESS: {
       return {
         ...state,
         exercises: action.exercises,
         loading: false,
       };
     }
-    case 'GetExercisesFail': {
+    case ActionTypes.GET_EXERCISES_FAIL: {
       return {
         ...state,
         loading: false,
         error: action.error,
       };
     }
-    case 'AddExerciseRequest': {
+    case ActionTypes.ADD_EXERCISE_REQUEST: {
       return {
         ...state,
         loading: true,
         error: null
       };
     }
-    case 'AddExerciseSuccess': {
+    case ActionTypes.ADD_EXERCISE_SUCCESS: {
       return {
         ...state,
         exercises: [
@@ -57,7 +58,7 @@ const exerciseReducer: Reducer<IExercisesState, ExerciseActions> = (
         loading: false,
       };
     }
-    case 'AddExerciseFail': {
+    case ActionTypes.ADD_EXERCISE_FAIL: {
       return {
         ...state,
         loading: false,
