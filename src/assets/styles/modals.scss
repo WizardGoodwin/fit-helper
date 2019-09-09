@@ -1,0 +1,43 @@
+.modal-post {
+  position: fixed;
+  width: 50%;
+  left: 25%;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  top: 0;
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+}
+
+.ReactModal__Content--after-open {
+  top: 15%;
+  opacity: 1;
+}
+
+.ReactModal__Content--before-close {
+  top: 0;
+  opacity: 0;
+}

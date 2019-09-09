@@ -1,4 +1,4 @@
-# React blog
+# Fit helper
 
 This is demo project, developed by me for training and demonstration purposes.
 The goal of it's creating - practicing skills and techniques for working with React and it's environment for <br>
