@@ -27,7 +27,6 @@ import {
 import { IMuscleGroup } from '../models/muscle-group.interface';
 
 
-
 interface IProps {
   exercises: IExercise[];
   muscleGroups: IMuscleGroup[];

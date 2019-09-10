@@ -65,8 +65,8 @@ const exerciseReducer: Reducer<IExercisesState, ExerciseActions> = (
         error: action.error,
       };
     }
+    default: return state;
   }
-  return state;
 };
 
 export default exerciseReducer;

@@ -41,8 +41,8 @@ const muscleGroupReducer: Reducer<IMuscleGroupsState, MuscleGroupActions> = (
         error: action.error,
       };
     }
+    default: return state;
   }
-  return state;
 };
 
 export default muscleGroupReducer;
