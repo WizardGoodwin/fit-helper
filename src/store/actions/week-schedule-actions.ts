@@ -43,7 +43,7 @@ export const getWeekSchedule: ActionCreator<
       const response: AxiosResponse = await axios.get('/week-schedule');
 
       const getWeekScheduleSuccess: IGetWeekScheduleSuccess = {
-        weekSchedule: response.data,
+        weekSchedule: response.data[0].data,
         type: ActionTypes.GET_WEEK_SCHEDULE_SUCCESS,
       };
       return dispatch(getWeekScheduleSuccess);
@@ -64,14 +64,15 @@ export const updateWeekSchedule: ActionCreator<
     null,
     IUpdateWeekScheduleSuccess | IUpdateWeekScheduleFail
     >
-  > = (weekScheduleId) => {
+  > = (weekSchedule: IWeekSchedule) => {
   return async (dispatch: Dispatch) => {
     try {
       const updateWeekScheduleRequest: IUpdateWeekScheduleRequest = {
         type: ActionTypes.UPDATE_WEEK_SCHEDULE_REQUEST,
       };
       dispatch(updateWeekScheduleRequest);
-      const response: AxiosResponse = await axios.put(`/week-schedule/${weekScheduleId}`);
+      console.log(weekSchedule);
+      const response: AxiosResponse = await axios.put(`/week-schedule/1`, weekSchedule);
 
       const updateWeekScheduleSuccess: IUpdateWeekScheduleSuccess = {
         weekSchedule: response.data,
