@@ -16,6 +16,16 @@ export interface IGetWeekScheduleFail extends Action<ActionTypes.GET_WEEK_SCHEDU
   error: string;
 }
 
+export interface IUpdateWeekScheduleRequest extends Action<ActionTypes.UPDATE_WEEK_SCHEDULE_REQUEST> {}
+
+export interface IUpdateWeekScheduleSuccess extends Action<ActionTypes.UPDATE_WEEK_SCHEDULE_SUCCESS> {
+  weekSchedule: IWeekSchedule;
+}
+
+export interface IUpdateWeekScheduleFail extends Action<ActionTypes.UPDATE_WEEK_SCHEDULE_FAIL> {
+  error: string;
+}
+
 export const getWeekSchedule: ActionCreator<
   ThunkAction<
     Promise<IGetWeekScheduleSuccess | IGetWeekScheduleFail>,
@@ -47,10 +57,44 @@ export const getWeekSchedule: ActionCreator<
   };
 };
 
+export const updateWeekSchedule: ActionCreator<
+  ThunkAction<
+    Promise<IUpdateWeekScheduleSuccess | IUpdateWeekScheduleFail>,
+    IWeekSchedule | string,
+    null,
+    IUpdateWeekScheduleSuccess | IUpdateWeekScheduleFail
+    >
+  > = (weekScheduleId) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const updateWeekScheduleRequest: IUpdateWeekScheduleRequest = {
+        type: ActionTypes.UPDATE_WEEK_SCHEDULE_REQUEST,
+      };
+      dispatch(updateWeekScheduleRequest);
+      const response: AxiosResponse = await axios.put(`/week-schedule/${weekScheduleId}`);
+
+      const updateWeekScheduleSuccess: IUpdateWeekScheduleSuccess = {
+        weekSchedule: response.data,
+        type: ActionTypes.UPDATE_WEEK_SCHEDULE_SUCCESS,
+      };
+      return dispatch(updateWeekScheduleSuccess);
+    } catch(error) {
+      const updateWeekScheduleFail: IUpdateWeekScheduleFail = {
+        error,
+        type: ActionTypes.UPDATE_WEEK_SCHEDULE_FAIL,
+      };
+      return dispatch(updateWeekScheduleFail);
+    }
+  };
+};
+
 export type WeekScheduleActions =
     IGetWeekScheduleRequest
   | IGetWeekScheduleSuccess
-  | IGetWeekScheduleFail;
+  | IGetWeekScheduleFail
+  | IUpdateWeekScheduleRequest
+  | IUpdateWeekScheduleSuccess
+  | IUpdateWeekScheduleFail;
 
 
 

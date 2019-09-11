@@ -73,7 +73,7 @@ export const addExercise: ActionCreator<
       dispatch(addExerciseRequest);
       const response: AxiosResponse = await axios.post('/exercises', newExercise);
       const addExerciseSuccess: IAddExerciseSuccess = {
-        exercise: response.data,
+        exercise: {id: response.data.id, ...newExercise },
         type: ActionTypes.ADD_EXERCISE_SUCCESS,
       };
       return dispatch(addExerciseSuccess);

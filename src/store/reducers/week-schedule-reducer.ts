@@ -45,6 +45,27 @@ const weekScheduleReducer: Reducer<IWeekScheduleState, WeekScheduleActions> = (
         error: action.error,
       };
     }
+    case ActionTypes.UPDATE_WEEK_SCHEDULE_REQUEST: {
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    }
+    case ActionTypes.UPDATE_WEEK_SCHEDULE_SUCCESS: {
+      return {
+        ...state,
+        weekSchedule: action.weekSchedule,
+        loading: false,
+      };
+    }
+    case ActionTypes.UPDATE_WEEK_SCHEDULE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    }
     default: return state;
   }
 };

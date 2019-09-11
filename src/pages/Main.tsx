@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { Divider, Grid, List, ListItem, makeStyles, Theme, Typography, withStyles } from '@material-ui/core';
+import { Button, Divider, Grid, List, ListItem, makeStyles, Theme, Typography, withStyles } from '@material-ui/core';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
 
 import Spinner from '../shared/Spinner/Spinner';
-import { IState } from '../store/reducers';
+import { IAppState } from '../store/reducers';
 import { getWeekSchedule } from '../store/actions/week-schedule-actions';
 import { IWeekSchedule } from '../models/week-schedule.interface';
 import { IGetWeekScheduleFail, IGetWeekScheduleSuccess } from '../store/actions/week-schedule-actions';
@@ -90,72 +90,82 @@ const ExerciseList: FC<IProps> = ({ weekSchedule, weekScheduleLoading, getWeekSc
           Расписание
         </Typography>
         <Divider />
-        <ExpansionPanel
-          square expanded={expanded === 'firstDay'}
-          onChange={handleChange('firstDay')}
-        >
-          <ExpansionPanelSummary aria-controls="firstDay-content" id="firstDay-header">
-            <Typography>Первый день</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <List>
-              {weekSchedule.firstDay.map((item: string) => {
+        <Grid item xs={8}>
+          <ExpansionPanel
+            square expanded={expanded === 'firstDay'}
+            onChange={handleChange('firstDay')}
+          >
+            <ExpansionPanelSummary aria-controls="firstDay-content" id="firstDay-header">
+              <Typography>Первый день</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List>
+                {weekSchedule.firstDay.map((item: string) => {
                   return (
                     <ListItem key={item}>
                       {item}
                     </ListItem>
                   )
                 })
-              }
-            </List>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel
-          square expanded={expanded === 'secondDay'}
-          onChange={handleChange('secondDay')}
-        >
-          <ExpansionPanelSummary aria-controls="secondDay-content" id="secondDay-header">
-            <Typography>Второй день</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <List>
-              {weekSchedule.secondDay.map((item: string) => {
-                return (
-                  <ListItem key={item}>
-                    {item}
-                  </ListItem>
-                )
-              })
-              }
-            </List>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel
-          square expanded={expanded === 'thirdDay'}
-          onChange={handleChange('thirdDay')}
-        >
-          <ExpansionPanelSummary aria-controls="thirdDay-content" id="thirdDay-header">
-            <Typography>Третий день</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <List>
-              {weekSchedule.thirdDay.map((item: string) => {
-                return (
-                  <ListItem key={item}>
-                    {item}
-                  </ListItem>
-                )
-              })
-              }
-            </List>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+                }
+              </List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel
+            square expanded={expanded === 'secondDay'}
+            onChange={handleChange('secondDay')}
+          >
+            <ExpansionPanelSummary aria-controls="secondDay-content" id="secondDay-header">
+              <Typography>Второй день</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List>
+                {weekSchedule.secondDay.map((item: string) => {
+                  return (
+                    <ListItem key={item}>
+                      {item}
+                    </ListItem>
+                  )
+                })
+                }
+              </List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel
+            square expanded={expanded === 'thirdDay'}
+            onChange={handleChange('thirdDay')}
+          >
+            <ExpansionPanelSummary aria-controls="thirdDay-content" id="thirdDay-header">
+              <Typography>Третий день</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List>
+                {weekSchedule.thirdDay.map((item: string) => {
+                  return (
+                    <ListItem key={item}>
+                      {item}
+                    </ListItem>
+                  )
+                })
+                }
+              </List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Grid>
+        <Grid item xs={4}>
+          <Button
+            variant="contained"
+            color="primary"
+          >
+            Сгенерировать расписание
+          </Button>
+        </Grid>
       </Grid>
     </>
   );
 };
 
-const mapStateToProps = ({ weekScheduleState }: IState) => {
+const mapStateToProps = ({ weekScheduleState }: IAppState) => {
   return {
     weekSchedule: weekScheduleState.weekSchedule,
     weekScheduleLoading: weekScheduleState.loading,

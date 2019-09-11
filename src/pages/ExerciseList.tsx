@@ -18,7 +18,7 @@ import {
 } from '../store/actions/exercise-actions';
 import { IExercise } from '../models/exercise.interface';
 import Spinner from '../shared/Spinner/Spinner';
-import { IState } from '../store/reducers';
+import { IAppState } from '../store/reducers';
 import {
   getMuscleGroups,
   IGetMuscleGroupsFail,
@@ -141,7 +141,7 @@ const ExerciseList: FC<IProps> = (
   );
 };
 
-const mapStateToProps = ({ exerciseState, muscleGroupState }: IState) => {
+const mapStateToProps = ({ exerciseState, muscleGroupState }: IAppState) => {
   return {
     exercises: exerciseState.exercises,
     exercisesLoading: exerciseState.loading,
