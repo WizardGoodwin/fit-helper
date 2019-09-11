@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainGrid: {
     marginTop: theme.spacing(3),
   },
+  exerciseList: {
+    width: '100%',
+  }
 }));
 
 const ExpansionPanel = withStyles({
@@ -120,12 +123,19 @@ const ExerciseList: FC<IProps> = (
                   <Typography>{group.name}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                  <List>
+                  <List className={classes.exerciseList}>
                     {exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
                       .map((item: IExercise) => {
                         return (
                           <ListItem key={item.id}>
-                            {item.name}
+                            <Grid container>
+                              <Grid item xs={4}>
+                                <Typography>{item.name}</Typography>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <Typography>{item.weight} кг</Typography>
+                              </Grid>
+                            </Grid>
                           </ListItem>
                         )
                       })
