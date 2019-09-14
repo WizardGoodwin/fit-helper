@@ -54,11 +54,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(3),
   },
   scheduleBtn: {
-    marginLeft: theme.spacing(5)
+    marginLeft: theme.spacing(5),
   },
   scheduleCard: {
     margin: theme.spacing(3),
-  }
+  },
+  title: {
+    marginLeft: theme.spacing(3),
+  },
 }));
 
 const ExerciseList: FC<IProps> = ({
@@ -95,7 +98,7 @@ const ExerciseList: FC<IProps> = ({
     <>
       {weekScheduleLoading && <Spinner />}
       <Grid container className={classes.mainGrid}>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom className={classes.title}>
           Расписание
         </Typography>
         <Button

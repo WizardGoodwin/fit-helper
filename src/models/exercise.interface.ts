@@ -1,6 +1,6 @@
 export interface IExercise {
   id?: number;
   name: string;
-  weight?: number;
+  weight: number;
   muscleGroupId: number;
 }

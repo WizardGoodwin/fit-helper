@@ -12,7 +12,7 @@ export interface IExercisesState {
 const initialState: IExercisesState = {
   exercises: [],
   loading: false,
-  error: null
+  error: null,
 };
 
 const exerciseReducer: Reducer<IExercisesState, ExerciseActions> = (
@@ -59,6 +59,55 @@ const exerciseReducer: Reducer<IExercisesState, ExerciseActions> = (
       };
     }
     case ActionTypes.ADD_EXERCISE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    }
+    case ActionTypes.UPDATE_EXERCISE_REQUEST: {
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    }
+    case ActionTypes.UPDATE_EXERCISE_SUCCESS: {
+      const index = state.exercises.findIndex((item: IExercise) => item.id === action.exercise.id);
+      const newExercises = [...state.exercises];
+      newExercises[index] = action.exercise;
+      return {
+        ...state,
+        exercises: [
+          ...newExercises,
+        ],
+        loading: false,
+      };
+    }
+    case ActionTypes.UPDATE_EXERCISE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    }
+    case ActionTypes.DELETE_EXERCISE_REQUEST: {
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    }
+    case ActionTypes.DELETE_EXERCISE_SUCCESS: {
+      return {
+        ...state,
+        exercises: [
+          ...state.exercises.filter((item: IExercise) => item.id !== action.id),
+        ],
+        loading: false,
+      };
+    }
+    case ActionTypes.DELETE_EXERCISE_FAIL: {
       return {
         ...state,
         loading: false,

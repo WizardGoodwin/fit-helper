@@ -26,6 +26,26 @@ export interface IAddExerciseFail extends Action<ActionTypes.ADD_EXERCISE_FAIL> 
   error: string;
 }
 
+export interface IUpdateExerciseRequest extends Action<ActionTypes.UPDATE_EXERCISE_REQUEST> {}
+
+export interface IUpdateExerciseSuccess extends Action<ActionTypes.UPDATE_EXERCISE_SUCCESS> {
+  exercise: IExercise;
+}
+
+export interface IUpdateExerciseFail extends Action<ActionTypes.UPDATE_EXERCISE_FAIL> {
+  error: string;
+}
+
+export interface IDeleteExerciseRequest extends Action<ActionTypes.DELETE_EXERCISE_REQUEST> {}
+
+export interface IDeleteExerciseSuccess extends Action<ActionTypes.DELETE_EXERCISE_SUCCESS> {
+  id?: number;
+}
+
+export interface IDeleteExerciseFail extends Action<ActionTypes.DELETE_EXERCISE_FAIL> {
+  error: string;
+}
+
 export const getExercises: ActionCreator<
   ThunkAction<
     Promise<IGetExercisesSuccess | IGetExercisesFail>,
@@ -87,13 +107,76 @@ export const addExercise: ActionCreator<
   };
 };
 
+export const updateExercise: ActionCreator<
+  ThunkAction<
+    Promise<IUpdateExerciseSuccess | IUpdateExerciseFail>,
+    IExercise | string,
+    null,
+    IUpdateExerciseSuccess | IUpdateExerciseFail
+    >
+  > = (exercise: IExercise) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const updateExerciseRequest: IUpdateExerciseRequest = {
+        type: ActionTypes.UPDATE_EXERCISE_REQUEST,
+      };
+      dispatch(updateExerciseRequest);
+      const response: AxiosResponse = await axios.put(`/exercises/${exercise.id}`, exercise);
+      const updateExerciseSuccess: IUpdateExerciseSuccess = {
+        exercise,
+        type: ActionTypes.UPDATE_EXERCISE_SUCCESS,
+      };
+      return dispatch(updateExerciseSuccess);
+    } catch(error) {
+      const updateExerciseFail: IUpdateExerciseFail = {
+        error,
+        type: ActionTypes.UPDATE_EXERCISE_FAIL,
+      };
+      return dispatch(updateExerciseFail);
+    }
+  };
+};
+
+export const deleteExercise: ActionCreator<
+  ThunkAction<
+    Promise<IDeleteExerciseSuccess | IDeleteExerciseFail>,
+    string | void,
+    null,
+    IDeleteExerciseSuccess | IDeleteExerciseFail
+    >
+  > = (id?: number) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const deleteExerciseRequest: IDeleteExerciseRequest = {
+        type: ActionTypes.DELETE_EXERCISE_REQUEST,
+      };
+      dispatch(deleteExerciseRequest);
+      const response: AxiosResponse = await axios.delete(`/exercises/${id}`);
+      const deleteExerciseSuccess: IDeleteExerciseSuccess = {
+        id,
+        type: ActionTypes.DELETE_EXERCISE_SUCCESS,
+      };
+      return dispatch(deleteExerciseSuccess);
+    } catch(error) {
+      const deleteExerciseFail: IDeleteExerciseFail = {
+        error,
+        type: ActionTypes.DELETE_EXERCISE_FAIL,
+      };
+      return dispatch(deleteExerciseFail);
+    }
+  };
+};
+
 export type ExerciseActions =
     IGetExercisesRequest
   | IGetExercisesSuccess
   | IGetExercisesFail
   | IAddExerciseRequest
   | IAddExerciseSuccess
-  | IAddExerciseFail;
-
-
-
+  | IAddExerciseFail
+  | IUpdateExerciseRequest
+  | IUpdateExerciseSuccess
+  | IUpdateExerciseFail
+  | IDeleteExerciseRequest
+  | IDeleteExerciseSuccess
+  | IDeleteExerciseFail;
