@@ -1,7 +1,5 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { AnyAction } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import React, { FC, useEffect } from 'react';
+import { inject, observer } from 'mobx-react';
 
 import {
   Button,
@@ -14,24 +12,9 @@ import {
   makeStyles,
   Theme,
   Typography,
-  withStyles,
 } from '@material-ui/core';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
 
 import Spinner from '../shared/Spinner/Spinner';
-import { IAppState } from '../store/reducers';
-import { getExercises, IGetExercisesFail, IGetExercisesSuccess } from '../store/actions/exercise-actions';
-import { getMuscleGroups, IGetMuscleGroupsFail, IGetMuscleGroupsSuccess } from '../store/actions/muscle-group-actions';
-import {
-  getWeekSchedule,
-  updateWeekSchedule,
-  IGetWeekScheduleFail,
-  IGetWeekScheduleSuccess,
-  IUpdateWeekScheduleSuccess,
-  IUpdateWeekScheduleFail,
-} from '../store/actions/week-schedule-actions';
 import { IWeekSchedule } from '../models/week-schedule.interface';
 import { IExercise } from '../models/exercise.interface';
 import { IMuscleGroup } from '../models/muscle-group.interface';
@@ -42,11 +25,11 @@ interface IProps {
   exercises: IExercise[];
   muscleGroups: IMuscleGroup[];
   weekSchedule: IWeekSchedule;
-  weekScheduleLoading: boolean;
-  getExercises: () => Promise<IGetExercisesSuccess | IGetExercisesFail>;
-  getMuscleGroups: () => Promise<IGetMuscleGroupsSuccess | IGetMuscleGroupsFail>;
-  getWeekSchedule: () => Promise<IGetWeekScheduleSuccess | IGetWeekScheduleFail>;
-  updateWeekSchedule: (weekSchedule: IWeekSchedule) => Promise<IUpdateWeekScheduleSuccess | IUpdateWeekScheduleFail>;
+  isWeekScheduleLoading: boolean;
+  getExercises: () => Promise<any>;
+  getMuscleGroups: () => Promise<any>;
+  getWeekSchedule: () => Promise<any>;
+  updateWeekSchedule: (weekSchedule: IWeekSchedule) => Promise<any>;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -64,30 +47,27 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const ExerciseList: FC<IProps> = ({
-  exercises,
-  muscleGroups,
-  weekSchedule,
-  weekScheduleLoading,
-  getExercises,
-  getMuscleGroups,
-  getWeekSchedule,
-  updateWeekSchedule
-}) => {
+const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', 'weekScheduleStore')(
+  observer((props) => {
+    const {
+      exercises,
+      muscleGroups,
+      weekSchedule,
+      isWeekScheduleLoading,
+      getExercises,
+      getMuscleGroups,
+      getWeekSchedule,
+      updateWeekSchedule
+    } = props;
+    console.log(props);
 
   const classes = useStyles();
-
-  const [expanded, setExpanded] = useState<string | false>(false);
 
   useEffect(() => {
     getExercises();
     getMuscleGroups();
     getWeekSchedule();
   }, []);
-
-  const handleChange = (title: string) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
-    setExpanded(newExpanded ? title : false);
-  };
 
   const generateSchedule = () => {
     const generatedSchedule: IWeekSchedule = getRandomSchedule(exercises, muscleGroups);
@@ -96,7 +76,7 @@ const ExerciseList: FC<IProps> = ({
 
   return (
     <>
-      {weekScheduleLoading && <Spinner />}
+      {isWeekScheduleLoading && <Spinner />}
       <Grid container className={classes.mainGrid}>
         <Typography variant="h5" gutterBottom className={classes.title}>
           Расписание
@@ -169,27 +149,6 @@ const ExerciseList: FC<IProps> = ({
       </Grid>
     </>
   );
-};
+}));
 
-const mapStateToProps = ({ exerciseState, muscleGroupState, weekScheduleState }: IAppState) => {
-  return {
-    exercises: exerciseState.exercises,
-    muscleGroups: muscleGroupState.muscleGroups,
-    weekSchedule: weekScheduleState.weekSchedule,
-    weekScheduleLoading: weekScheduleState.loading,
-  };
-};
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    getExercises: () => dispatch(getExercises()),
-    getMuscleGroups: () => dispatch(getMuscleGroups()),
-    getWeekSchedule: () => dispatch(getWeekSchedule()),
-    updateWeekSchedule: (weekSchedule: IWeekSchedule) => dispatch(updateWeekSchedule(weekSchedule)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ExerciseList);
+export default ExerciseList;

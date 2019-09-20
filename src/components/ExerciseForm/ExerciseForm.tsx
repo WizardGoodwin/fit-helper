@@ -1,7 +1,5 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { inject, observer } from 'mobx-react';
 
 import {
   createStyles,
@@ -17,13 +15,9 @@ import {
   Button,
 } from '@material-ui/core';
 
-import { IAppState } from '../../store/reducers';
-import { addExercise, IAddExerciseFail, IAddExerciseSuccess, } from '../../store/actions/exercise-actions';
-import { getMuscleGroups, IGetMuscleGroupsFail, IGetMuscleGroupsSuccess } from '../../store/actions/muscle-group-actions';
 import { IMuscleGroup } from '../../models/muscle-group.interface';
-import Spinner from '../../shared/Spinner/Spinner';
 import { IExercise } from '../../models/exercise.interface';
-import { IUpdateExerciseFail, IUpdateExerciseSuccess, updateExercise } from '../../store/actions/exercise-actions';
+import Spinner from '../../shared/Spinner/Spinner';
 
 
 interface IState {
@@ -34,13 +28,13 @@ interface IState {
 
 interface IProps {
   muscleGroups: IMuscleGroup[];
-  exerciseLoading: boolean;
-  muscleGroupsLoading: boolean;
+  isExercisesLoading: boolean;
+  isMuscleGroupsLoading: boolean;
   editedExercise?: IExercise;
   setModalOpen?: (value: boolean) => void;
-  addExercise: (exercise: IExercise) => Promise<IAddExerciseSuccess | IAddExerciseFail>;
-  updateExercise: (exercise: IExercise) => Promise<IUpdateExerciseSuccess | IUpdateExerciseFail>;
-  getMuscleGroups: () => Promise<IGetMuscleGroupsSuccess | IGetMuscleGroupsFail>;
+  addExercise: (exercise: IExercise) => Promise<any>;
+  updateExercise: (exercise: IExercise) => Promise<any>;
+  getMuscleGroups: () => Promise<any>;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,12 +63,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const ExerciseForm: FC<IProps> = ({
+const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
+  observer(({
   editedExercise,
   muscleGroups,
-  exerciseLoading,
+  isExercisesLoading,
   setModalOpen,
-  muscleGroupsLoading,
+  isMuscleGroupsLoading,
   getMuscleGroups,
   addExercise,
   updateExercise
@@ -118,7 +113,7 @@ const ExerciseForm: FC<IProps> = ({
 
   return (
     <>
-      {muscleGroupsLoading ? <Spinner /> :
+      {isMuscleGroupsLoading ? <Spinner /> :
         <Grid container className={classes.mainGrid}>
           <Divider />
           <form className={classes.container} noValidate autoComplete="off">
@@ -153,7 +148,7 @@ const ExerciseForm: FC<IProps> = ({
               margin="normal"
               variant="outlined"
             />
-            {exerciseLoading ? <Spinner /> :
+            {isExercisesLoading ? <Spinner /> :
               <Button
                 variant="contained"
                 color="primary"
@@ -169,25 +164,6 @@ const ExerciseForm: FC<IProps> = ({
     </>
 
   );
-};
+}));
 
-const mapStateToProps = ({ exerciseState, muscleGroupState }: IAppState) => {
-  return {
-    exerciseLoading: exerciseState.loading,
-    muscleGroups: muscleGroupState.muscleGroups,
-    muscleGroupsLoading: muscleGroupState.loading,
-  };
-};
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    addExercise: (exercise: IExercise) => dispatch(addExercise(exercise)),
-    updateExercise: (exercise: IExercise) => dispatch(updateExercise(exercise)),
-    getMuscleGroups: () => dispatch(getMuscleGroups()),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ExerciseForm);
+export default ExerciseForm;

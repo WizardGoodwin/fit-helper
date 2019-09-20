@@ -3,13 +3,12 @@ import { Route, Switch } from 'react-router-dom';
 
 import NotFound from '../../shared/NotFound/NotFound';
 import Layout from '../Layout/Layot';
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Main from '../../pages/Main';
 import ExerciseList from '../../pages/ExerciseList';
 import AddExercise from '../../pages/AddExercise';
 
-const App = () => {
 
+const App = () => {
   return (
     <Layout>
       <Switch>
@@ -22,4 +21,4 @@ const App = () => {
   );
 };
 
-export default withErrorHandler(App);
+export default App;

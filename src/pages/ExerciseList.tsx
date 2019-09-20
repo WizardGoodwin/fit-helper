@@ -1,7 +1,5 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import { connect } from 'react-redux';
+import { inject, observer } from 'mobx-react';
 
 import {
   Backdrop,
@@ -13,32 +11,20 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import {
-  deleteExercise,
-  getExercises, IDeleteExerciseFail, IDeleteExerciseSuccess,
-  IGetExercisesFail,
-  IGetExercisesSuccess,
-} from '../store/actions/exercise-actions';
 import { IExercise } from '../models/exercise.interface';
-import Spinner from '../shared/Spinner/Spinner';
-import { IAppState } from '../store/reducers';
-import {
-  getMuscleGroups,
-  IGetMuscleGroupsFail,
-  IGetMuscleGroupsSuccess
-} from '../store/actions/muscle-group-actions';
 import { IMuscleGroup } from '../models/muscle-group.interface';
+import Spinner from '../shared/Spinner/Spinner';
 import ExerciseForm from '../components/ExerciseForm/ExerciseForm';
 
 
 interface IProps {
   exercises: IExercise[];
   muscleGroups: IMuscleGroup[];
-  exercisesLoading: boolean;
-  muscleGroupsLoading: boolean;
-  getExercises: () => Promise<IGetExercisesSuccess | IGetExercisesFail>;
-  getMuscleGroups: () => Promise<IGetMuscleGroupsSuccess | IGetMuscleGroupsFail>;
-  deleteExercise: (id?: number) => Promise<IDeleteExerciseSuccess | IDeleteExerciseFail>;
+  isExercisesLoading: boolean;
+  isMuscleGroupsLoading: boolean;
+  getExercises: () => Promise<any>;
+  getMuscleGroups: () => Promise<any>;
+  deleteExercise: (id?: number) => Promise<any>;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -106,11 +92,13 @@ const ExpansionPanelDetails = withStyles((theme: Theme) => ({
   },
 }))(MuiExpansionPanelDetails);
 
-const ExerciseList: FC<IProps> = ({
+
+const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
+  observer(({
   exercises,
   muscleGroups,
-  exercisesLoading,
-  muscleGroupsLoading,
+  isExercisesLoading,
+  isMuscleGroupsLoading,
   getExercises,
   getMuscleGroups,
   deleteExercise
@@ -151,7 +139,7 @@ const ExerciseList: FC<IProps> = ({
 
   return (
     <>
-      {(exercisesLoading || muscleGroupsLoading) && <Spinner />}
+      {(isExercisesLoading || isMuscleGroupsLoading) && <Spinner />}
       <Grid container className={classes.mainGrid}>
         <Typography variant="h5" gutterBottom>
           Список упражнений
@@ -221,7 +209,7 @@ const ExerciseList: FC<IProps> = ({
             <Typography variant="h5" gutterBottom>
               Редактировать упражнение
             </Typography>
-            <ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>
+            {/*<ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>*/}
           </div>
         </Fade>
       </Modal>
@@ -265,26 +253,6 @@ const ExerciseList: FC<IProps> = ({
       </Modal>
     </>
   );
-};
+}));
 
-const mapStateToProps = ({ exerciseState, muscleGroupState }: IAppState) => {
-  return {
-    exercises: exerciseState.exercises,
-    exercisesLoading: exerciseState.loading,
-    muscleGroups: muscleGroupState.muscleGroups,
-    muscleGroupsLoading: muscleGroupState.loading,
-  };
-};
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    getExercises: () => dispatch(getExercises()),
-    getMuscleGroups: () => dispatch(getMuscleGroups()),
-    deleteExercise: (id?: number) => dispatch((deleteExercise(id)))
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ExerciseList);
+export default ExerciseList;
