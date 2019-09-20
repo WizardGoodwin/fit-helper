@@ -27,7 +27,7 @@
     {
       "id": 5,
       "name": "Горизонтальная тяга",
-      "weight": 40,
+      "weight": "45",
       "muscleGroupId": 2
     },
     {
@@ -93,7 +93,7 @@
     {
       "id": 16,
       "name": "Французский жим с гантелей",
-      "weight": 18,
+      "weight": "20",
       "muscleGroupId": 6
     },
     {

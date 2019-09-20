@@ -14,11 +14,7 @@ import {
   makeStyles,
   Theme,
   Typography,
-  withStyles,
 } from '@material-ui/core';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
 
 import Spinner from '../shared/Spinner/Spinner';
 import { IAppState } from '../store/reducers';
@@ -77,17 +73,12 @@ const ExerciseList: FC<IProps> = ({
 
   const classes = useStyles();
 
-  const [expanded, setExpanded] = useState<string | false>(false);
 
   useEffect(() => {
     getExercises();
     getMuscleGroups();
     getWeekSchedule();
   }, []);
-
-  const handleChange = (title: string) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
-    setExpanded(newExpanded ? title : false);
-  };
 
   const generateSchedule = () => {
     const generatedSchedule: IWeekSchedule = getRandomSchedule(exercises, muscleGroups);
