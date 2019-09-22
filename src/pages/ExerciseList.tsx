@@ -18,13 +18,19 @@ import ExerciseForm from '../components/ExerciseForm/ExerciseForm';
 
 
 interface IProps {
-  exercises: IExercise[];
-  muscleGroups: IMuscleGroup[];
-  isExercisesLoading: boolean;
-  isMuscleGroupsLoading: boolean;
-  getExercises: () => Promise<any>;
-  getMuscleGroups: () => Promise<any>;
-  deleteExercise: (id?: number) => Promise<any>;
+  exercisesStore: {
+    exercises: IExercise[];
+    isLoading: boolean;
+    isDeleted: boolean;
+    getExercises: () => any;
+    deleteExercise: (id?: number) => any;
+    clearState: () => any;
+  },
+  muscleGroupsStore: {
+    muscleGroups: IMuscleGroup[];
+    isLoading: boolean;
+    getMuscleGroups: () => any;
+  }
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -94,15 +100,7 @@ const ExpansionPanelDetails = withStyles((theme: Theme) => ({
 
 
 const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
-  observer(({
-  exercises,
-  muscleGroups,
-  isExercisesLoading,
-  isMuscleGroupsLoading,
-  getExercises,
-  getMuscleGroups,
-  deleteExercise
-}) => {
+  observer(({ exercisesStore, muscleGroupsStore }) => {
 
   const classes = useStyles();
 
@@ -113,8 +111,8 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
 
 
   useEffect(() => {
-    getExercises();
-    getMuscleGroups();
+    exercisesStore.getExercises();
+    muscleGroupsStore.getMuscleGroups();
   }, []);
 
   const handleChange = (id: number) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
@@ -133,19 +131,24 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
 
   const handleDeleteConfirm = () => {
     if (selectedExercise) {
-      deleteExercise(selectedExercise.id).then(() => setDeleteModalOpen(false));
+      exercisesStore.deleteExercise(selectedExercise.id);
     }
   };
 
+  if (exercisesStore.isDeleted) {
+    setDeleteModalOpen(false);
+    exercisesStore.clearState();
+  }
+
   return (
     <>
-      {(isExercisesLoading || isMuscleGroupsLoading) && <Spinner />}
+      {(exercisesStore.isLoading || muscleGroupsStore.isLoading) && <Spinner />}
       <Grid container className={classes.mainGrid}>
         <Typography variant="h5" gutterBottom>
           Список упражнений
         </Typography>
         <Divider />
-        {muscleGroups.map((group: IMuscleGroup) => {
+        {muscleGroupsStore.muscleGroups.map((group: IMuscleGroup) => {
           return (
             <ExpansionPanel
               square expanded={expanded === group.id}
@@ -156,7 +159,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <List className={classes.exerciseList}>
-                  {exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
+                  {exercisesStore.exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
                     .map((item: IExercise) => {
                       return (
                         <ListItem key={item.id}>
@@ -209,7 +212,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
             <Typography variant="h5" gutterBottom>
               Редактировать упражнение
             </Typography>
-            {/*<ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>*/}
+            <ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>
           </div>
         </Fade>
       </Modal>

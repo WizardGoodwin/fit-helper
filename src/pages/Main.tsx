@@ -22,14 +22,22 @@ import { getRandomSchedule } from '../shared/utils';
 
 
 interface IProps {
-  exercises: IExercise[];
-  muscleGroups: IMuscleGroup[];
-  weekSchedule: IWeekSchedule;
-  isWeekScheduleLoading: boolean;
-  getExercises: () => Promise<any>;
-  getMuscleGroups: () => Promise<any>;
-  getWeekSchedule: () => Promise<any>;
-  updateWeekSchedule: (weekSchedule: IWeekSchedule) => Promise<any>;
+  exercisesStore: {
+    exercises: IExercise[];
+    isLoading: boolean;
+    getExercises: () => any;
+  },
+  muscleGroupsStore: {
+    muscleGroups: IMuscleGroup[];
+    isLoading: boolean;
+    getMuscleGroups: () => any;
+  },
+  weekScheduleStore: {
+    weekSchedule: IWeekSchedule;
+    isLoading: boolean;
+    getWeekSchedule: () => any;
+    updateWeekSchedule: (weekSchedule: IWeekSchedule) => any;
+  }
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -48,105 +56,97 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', 'weekScheduleStore')(
-  observer((props) => {
-    const {
-      exercises,
-      muscleGroups,
-      weekSchedule,
-      isWeekScheduleLoading,
-      getExercises,
-      getMuscleGroups,
-      getWeekSchedule,
-      updateWeekSchedule
-    } = props;
-    console.log(props);
+  observer(({ exercisesStore, muscleGroupsStore, weekScheduleStore }) => {
 
   const classes = useStyles();
 
   useEffect(() => {
-    getExercises();
-    getMuscleGroups();
-    getWeekSchedule();
+    weekScheduleStore.getWeekSchedule();
+    exercisesStore.getExercises();
+    muscleGroupsStore.getMuscleGroups();
   }, []);
 
   const generateSchedule = () => {
-    const generatedSchedule: IWeekSchedule = getRandomSchedule(exercises, muscleGroups);
-    updateWeekSchedule(generatedSchedule);
+    const generatedSchedule: IWeekSchedule = getRandomSchedule(exercisesStore.exercises, muscleGroupsStore.muscleGroups);
+    weekScheduleStore.updateWeekSchedule(generatedSchedule);
   };
 
   return (
     <>
-      {isWeekScheduleLoading && <Spinner />}
-      <Grid container className={classes.mainGrid}>
-        <Typography variant="h5" gutterBottom className={classes.title}>
-          Расписание
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.scheduleBtn}
-          onClick={() => generateSchedule()}
-        >
-          Сгенерировать расписание
-        </Button>
-        <Divider />
-        <Grid container>
-          <Grid item xs={4}>
-            <Card className={classes.scheduleCard}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Понедельник
-                </Typography>
-                <List>
-                  {weekSchedule.firstDay.map((item: string) => {
-                    return (
-                      <ListItem key={item}>
-                        <Typography>{item}</Typography>
-                      </ListItem>
-                    )
-                  })}
-                </List>
-              </CardContent>
-            </Card>
+      {(weekScheduleStore.isLoading || exercisesStore.isLoading || muscleGroupsStore.isLoading) ? <Spinner />
+        : (
+          <Grid container className={classes.mainGrid}>
+            <Typography variant="h5" gutterBottom className={classes.title}>
+              Расписание
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.scheduleBtn}
+              //onClick={generateSchedule}
+            >
+              Сгенерировать расписание
+            </Button>
+            <Divider />
+            <Grid container>
+              <Grid item xs={4}>
+                <Card className={classes.scheduleCard}>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Понедельник
+                    </Typography>
+                    <List>
+                      {weekScheduleStore.weekSchedule.firstDay.map((item: string) => {
+                        return (
+                          <ListItem key={item}>
+                            <Typography>{item}</Typography>
+                          </ListItem>
+                        )
+                      })}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid component="div" item xs={4}>
+                <Card className={classes.scheduleCard}>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Среда
+                    </Typography>
+                    <List>
+                      {weekScheduleStore.weekSchedule.secondDay.map((item: string) => {
+                        return (
+                          <ListItem key={item}>
+                            <Typography>{item}</Typography>
+                          </ListItem>
+                        )
+                      })}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={4}>
+                <Card className={classes.scheduleCard}>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Понедельник
+                    </Typography>
+                    <List>
+                      {weekScheduleStore.weekSchedule.thirdDay.map((item: string) => {
+                        return (
+                          <ListItem key={item}>
+                            <Typography>{item}</Typography>
+                          </ListItem>
+                        )
+                      })}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid component="div" item xs={4}>
-            <Card className={classes.scheduleCard}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Среда
-                </Typography>
-                <List>
-                  {weekSchedule.secondDay.map((item: string) => {
-                    return (
-                      <ListItem key={item}>
-                        <Typography>{item}</Typography>
-                      </ListItem>
-                    )
-                  })}
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card className={classes.scheduleCard}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Понедельник
-                </Typography>
-                <List>
-                  {weekSchedule.thirdDay.map((item: string) => {
-                    return (
-                      <ListItem key={item}>
-                        <Typography>{item}</Typography>
-                      </ListItem>
-                    )
-                  })}
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Grid>
+        )
+      }
     </>
   );
 }));

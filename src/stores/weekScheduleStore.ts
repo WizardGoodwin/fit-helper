@@ -11,22 +11,23 @@ class WeekScheduleStore {
     secondDay: [],
     thirdDay: []
   };
-  @observable isWeekScheduleLoading = false;
+  @observable isLoading = false;
   @observable error: string | null = null;
 
   @action getWeekSchedule() {
-    this.isWeekScheduleLoading = true;
+    this.isLoading = true;
     this.error = null;
-    return axios.get('/week-schedule')
-      .then(action((response: AxiosResponse) => { this.weekSchedule = response.data; }))
+    return axios.get('/week-schedule/1')
+      .then(action((response: AxiosResponse) => { this.weekSchedule = response.data }))
       .catch(action((error: any) => {
         this.error = error;
       }))
-      .finally(action(() => { this.isWeekScheduleLoading = false; }));
+      .finally(action(() => { this.isLoading = false; }));
   }
 
   @action updateWeekSchedule(weekSchedule: IWeekSchedule) {
-    this.isWeekScheduleLoading = true;
+    this.isLoading = true;
+    this.error = null;
     return axios.put('/week-schedule/1', weekSchedule)
       .then(action(() => {
         this.weekSchedule = weekSchedule;
@@ -34,7 +35,7 @@ class WeekScheduleStore {
       .catch(action((error: any) => {
         this.error = error;
       }))
-      .finally(action(() => { this.isWeekScheduleLoading = false; }));
+      .finally(action(() => { this.isLoading = false; }));
   }
 }
 

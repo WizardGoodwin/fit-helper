@@ -24,7 +24,7 @@ const AddExercise: FC = () => {
             Добавить упражнение
           </Typography>
           <Divider />
-          {/*<ExerciseForm />*/}
+          <ExerciseForm />
         </Grid>
     </>
 

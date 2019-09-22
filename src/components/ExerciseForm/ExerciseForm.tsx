@@ -27,14 +27,21 @@ interface IState {
 }
 
 interface IProps {
-  muscleGroups: IMuscleGroup[];
-  isExercisesLoading: boolean;
-  isMuscleGroupsLoading: boolean;
+  exercisesStore?: {
+    isLoading: boolean;
+    isAdded: boolean;
+    isUpdated: boolean;
+    addExercise: (exercise: IExercise) => any;
+    updateExercise: (exercise: IExercise) => any;
+    clearState: () => any;
+  };
+  muscleGroupsStore?: {
+    muscleGroups: IMuscleGroup[];
+    isLoading: boolean;
+    getMuscleGroups: () => any;
+  };
   editedExercise?: IExercise;
-  setModalOpen?: (value: boolean) => void;
-  addExercise: (exercise: IExercise) => Promise<any>;
-  updateExercise: (exercise: IExercise) => Promise<any>;
-  getMuscleGroups: () => Promise<any>;
+  setModalOpen?: (value: boolean) => any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,14 +72,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   observer(({
+  exercisesStore,
+  muscleGroupsStore,
   editedExercise,
-  muscleGroups,
-  isExercisesLoading,
   setModalOpen,
-  isMuscleGroupsLoading,
-  getMuscleGroups,
-  addExercise,
-  updateExercise
 }) => {
   const classes = useStyles();
 
@@ -85,7 +88,7 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   const [values, setValues] = useState<IState>(initialState);
 
   useEffect(() => {
-    getMuscleGroups();
+    muscleGroupsStore!.getMuscleGroups();
   }, []);
 
   const handleChange = (name: keyof typeof values) => (event: ChangeEvent<HTMLInputElement | { name?: string, value: unknown }>) => {
@@ -97,23 +100,29 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
 
   const submitForm = () => {
     if (editedExercise) {
-      updateExercise(values).then(() => {
-        if (setModalOpen) setModalOpen(false);
-      });
+      exercisesStore!.updateExercise(values);
     } else {
-      addExercise(values).then(() => {
-        setValues({
-          name: '',
-          muscleGroupId: 0,
-          weight: 0
-        })
-      });
+      exercisesStore!.addExercise(values);
     }
   };
 
+  if (exercisesStore!.isAdded) {
+    setValues({
+      name: '',
+      muscleGroupId: 0,
+      weight: 0
+    });
+    exercisesStore!.clearState();
+  }
+
+  if (exercisesStore!.isUpdated) {
+    setModalOpen!(false);
+    exercisesStore!.clearState();
+  }
+
   return (
     <>
-      {isMuscleGroupsLoading ? <Spinner /> :
+      {muscleGroupsStore!.isLoading ? <Spinner /> :
         <Grid container className={classes.mainGrid}>
           <Divider />
           <form className={classes.container} noValidate autoComplete="off">
@@ -133,7 +142,7 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
                 value={values.muscleGroupId}
                 onChange={handleChange('muscleGroupId')}
               >
-                {muscleGroups.map((item: IMuscleGroup) => {
+                {muscleGroupsStore!.muscleGroups.map((item: IMuscleGroup) => {
                   return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
                 })}
               </Select>
@@ -148,7 +157,7 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
               margin="normal"
               variant="outlined"
             />
-            {isExercisesLoading ? <Spinner /> :
+            {exercisesStore!.isLoading ? <Spinner /> :
               <Button
                 variant="contained"
                 color="primary"
