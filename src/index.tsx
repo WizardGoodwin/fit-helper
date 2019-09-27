@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'mobx-react';
 import { ThemeProvider } from '@material-ui/styles';
 
+import 'semantic-ui-css/semantic.min.css';
+
 import exercisesStore from './stores/exercisesStore';
 import muscleGroupsStore from './stores/muscleGroupsStore';
 import weekScheduleStore from './stores/weekScheduleStore';

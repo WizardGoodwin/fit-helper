@@ -1,50 +1,36 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { AppBar, IconButton, Toolbar, Link, makeStyles, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
-import MenuIcon from '@material-ui/icons/Menu';
+import { Header as SemanticHeader, Menu } from 'semantic-ui-react';
 
-const useStyles = makeStyles(theme => ({
-  toolbarTitle: {
-    flex: 1,
+const styles = {
+  menu: {
+    backgroundColor: '#2185d0',
   },
-  toolbarLink: {
-    padding: theme.spacing(1),
-    flexShrink: 0,
+  menuHeader: {
+    color: '#fff'
+  },
+  menuLink: {
+    color: '#fff'
   }
-}));
+};
 
 const Header = () => {
-  const classes = useStyles();
-
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu" href="#">
-          <MenuIcon />
-        </IconButton>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          className={classes.toolbarTitle}
-        >
-          Fit Helper
-        </Typography>
-        <nav>
-          <Link component={RouterLink} to="/" color="inherit" variant="button" className={classes.toolbarLink}>
-            Расписание
-          </Link>
-          <Link component={RouterLink} to="/exercises" color="inherit" variant="button" className={classes.toolbarLink}>
-            Список упражнений
-          </Link>
-          <Link component={RouterLink} to="/exercises/add" color="inherit" variant="button" className={classes.toolbarLink}>
-            Добавить упражнение
-          </Link>
-        </nav>
-      </Toolbar>
-    </AppBar>
+    <Menu pointing style={styles.menu}>
+      <Menu.Item >
+        <SemanticHeader as='h2' style={styles.menuHeader}>Fit Helper</SemanticHeader>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/' style={styles.menuLink}>Расписание</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/exercises' style={styles.menuLink}>Список упражений</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/exercises/new' style={styles.menuLink}>Добавить упражнение</Link>
+      </Menu.Item>
+    </Menu>
   );
 };
 

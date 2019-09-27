@@ -1,15 +1,7 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { Fragment, FC, useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import {
-  Backdrop,
-  Button,
-  Divider, Fade, Grid, List, ListItem,
-  makeStyles, Modal, Theme, Typography, withStyles,
-} from '@material-ui/core';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import { Accordion, Button, Grid, Header, Icon, Modal } from 'semantic-ui-react';
 
 import { IExercise } from '../models/exercise.interface';
 import { IMuscleGroup } from '../models/muscle-group.interface';
@@ -33,78 +25,25 @@ interface IProps {
   }
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const styles = {
   mainGrid: {
-    marginTop: theme.spacing(3),
+    padding: '3em',
   },
   exerciseList: {
     width: '100%',
   },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalInner: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(5),
-  },
-  deleteText: {
-    margin: theme.spacing(3, 0)
-  }
-}));
-
-const ExpansionPanel = withStyles({
-  root: {
+  accordion: {
     width: '100%',
-    border: '1px solid rgba(0, 0, 0, .125)',
-    boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
-    '&:before': {
-      display: 'none',
-    },
-    '&$expanded': {
-      margin: 'auto',
-    },
   },
-  expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-  root: {
-    backgroundColor: 'rgba(0, 0, 0, .03)',
-    borderBottom: '1px solid rgba(0, 0, 0, .125)',
-    marginBottom: -1,
-    minHeight: 56,
-    '&$expanded': {
-      minHeight: 56,
-    },
-  },
-  content: {
-    '&$expanded': {
-      margin: '12px 0',
-    },
-  },
-  expanded: {},
-})(MuiExpansionPanelSummary);
-
-const ExpansionPanelDetails = withStyles((theme: Theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiExpansionPanelDetails);
-
+  exerciseItem: {
+    padding: 0
+  }
+};
 
 const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   observer(({ exercisesStore, muscleGroupsStore }) => {
 
-  const classes = useStyles();
-
-  const [expanded, setExpanded] = useState<number | false>(false);
+  const [activeIndex, setActiveIndex] = useState<number | false>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [selectedExercise, setSelectedExercise] = useState<IExercise | undefined>(undefined);
@@ -115,8 +54,10 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
     muscleGroupsStore.getMuscleGroups();
   }, []);
 
-  const handleChange = (id: number) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
-    setExpanded(newExpanded ? id : false);
+  const handleAccordionClick = (e: React.SyntheticEvent<HTMLElement>, titleProps: any) => {
+    const { index } = titleProps;
+    const newIndex = activeIndex === index ? -1 : index;
+    setActiveIndex(newIndex);
   };
 
   const handleEdit = (exercise: IExercise) => {
@@ -141,120 +82,78 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   }
 
   return (
-    <>
-      {(exercisesStore.isLoading || muscleGroupsStore.isLoading) && <Spinner />}
-      <Grid container className={classes.mainGrid}>
-        <Typography variant="h5" gutterBottom>
-          Список упражнений
-        </Typography>
-        <Divider />
-        {muscleGroupsStore.muscleGroups.map((group: IMuscleGroup) => {
-          return (
-            <ExpansionPanel
-              square expanded={expanded === group.id}
-              onChange={handleChange(group.id)} key={group.id}
-            >
-              <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-                <Typography>{group.name}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <List className={classes.exerciseList}>
-                  {exercisesStore.exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
-                    .map((item: IExercise) => {
-                      return (
-                        <ListItem key={item.id}>
-                          <Grid container>
-                            <Grid item xs={4}>
-                              <Typography>{item.name}</Typography>
+    <Grid style={styles.mainGrid}>
+      <Grid.Row>
+        <Header as="h1">Список упражнений</Header>
+      </Grid.Row>
+      <Grid.Row>
+        {(exercisesStore.isLoading || muscleGroupsStore.isLoading) && <Spinner />}
+        <Accordion styled style={styles.accordion} >
+          {muscleGroupsStore.muscleGroups.map((group: IMuscleGroup) => {
+            return (
+              <Fragment key={group.id}>
+                <Accordion.Title
+                  active={activeIndex === group.id}
+                  index={group.id}
+                  onClick={handleAccordionClick}
+                >
+                  <Icon name='dropdown' />
+                  {group.name}
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === group.id}>
+                  <Grid style={styles.exerciseList}>
+                    {exercisesStore.exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
+                      .map((item: IExercise) => {
+                        return (
+                          <Grid.Row key={item.id} style={styles.exerciseItem}>
+                            <Grid columns={4}>
+                              <Grid.Column>
+                                <span>{item.name}</span>
+                              </Grid.Column>
+                              <Grid.Column>
+                                <span>{item.weight} кг</span>
+                              </Grid.Column>
+                              <Grid.Column>
+                                <Button primary onClick={() => handleEdit(item)}>
+                                  Редактировать
+                                </Button>
+                              </Grid.Column>
+                              <Grid.Column>
+                                <Button secondary onClick={() => handleDelete(item)}>
+                                  Удалить
+                                </Button>
+                              </Grid.Column>
                             </Grid>
-                            <Grid item xs={4}>
-                              <Typography>{item.weight} кг</Typography>
-                            </Grid>
-                            <Grid container item xs={4} justify="space-between">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => handleEdit(item)}
-                               >
-                                Редактировать
-                              </Button>
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => handleDelete(item)}
-                              >
-                                Удалить
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </ListItem>
-                      )
-                    })
-                  }
-                </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          )
-        })}
-      </Grid>
-      <Modal
-        className={classes.modal}
-        open={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={editModalOpen}>
-          <div className={classes.modalInner}>
-            <Typography variant="h5" gutterBottom>
-              Редактировать упражнение
-            </Typography>
-            <ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>
-          </div>
-        </Fade>
+                          </Grid.Row>
+                        )
+                      })
+                    }
+                  </Grid>
+                </Accordion.Content>
+              </Fragment>
+            )
+          })}
+        </Accordion>
+      </Grid.Row>
+
+      <Modal size="tiny" open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+        <Modal.Header>Редактировать упражнение</Modal.Header>
+        <Modal.Content>
+          <ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>
+        </Modal.Content>
       </Modal>
 
-      <Modal
-        className={classes.modal}
-        open={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={deleteModalOpen}>
-          <div className={classes.modalInner}>
-            <Typography variant="h5" gutterBottom>
-              Удалить упражнение
-            </Typography>
-            <Typography className={classes.deleteText}>
-              {`Вы действительно хотите удалить упражнение "${selectedExercise && selectedExercise.name}" ?`}
-            </Typography>
-            <Grid container justify="space-around">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleDeleteConfirm}
-              >
-                Да
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => setDeleteModalOpen(false)}
-              >
-                Нет
-              </Button>
-            </Grid>
-          </div>
-        </Fade>
+      <Modal size="mini" open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+        <Modal.Header>Удалить упражнение</Modal.Header>
+        <Modal.Content>
+          <p>{`Вы действительно хотите удалить упражнение "${selectedExercise && selectedExercise.name}" ?`}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button positive onClick={handleDeleteConfirm}>Да</Button>
+          <Button negative onClick={() => setDeleteModalOpen(false)}>Нет</Button>
+        </Modal.Actions>
       </Modal>
-    </>
+    </Grid>
   );
 }));
 

@@ -1,19 +1,7 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import {
-  createStyles,
-  Divider,
-  FormControl,
-  Grid,
-  makeStyles,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Theme,
-  Button,
-} from '@material-ui/core';
+import { Button, DropdownProps, Form, Grid, Select } from 'semantic-ui-react';
 
 import { IMuscleGroup } from '../../models/muscle-group.interface';
 import { IExercise } from '../../models/exercise.interface';
@@ -44,31 +32,25 @@ interface IProps {
   setModalOpen?: (value: boolean) => any;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      maxWidth: '500px'
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-    mainGrid: {
-      marginTop: theme.spacing(3),
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    submitBtn: {
-      marginTop: theme.spacing(3),
-    }
-  }),
-);
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '500px'
+  },
+  mainGrid: {
+    padding: '2em',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  formControl: {
+    margin: '1em',
+    minWidth: 120,
+  },
+  submitBtn: {
+    marginTop: '3em',
+  }
+};
 
 const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   observer(({
@@ -77,7 +59,6 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   editedExercise,
   setModalOpen,
 }) => {
-  const classes = useStyles();
 
   const initialState: IState = editedExercise ? editedExercise : {
     name: '',
@@ -96,6 +77,13 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
       ...values,
       [name]: event.target.value
     });
+  };
+
+  const handleSelectChange = (e: React.SyntheticEvent<HTMLElement>, data: any) => {
+    setValues({
+      ...values,
+      muscleGroupId: data.value
+    })
   };
 
   const submitForm = () => {
@@ -123,51 +111,47 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   return (
     <>
       {muscleGroupsStore!.isLoading ? <Spinner /> :
-        <Grid container className={classes.mainGrid}>
-          <Divider />
-          <form className={classes.container} noValidate autoComplete="off">
-            <TextField
-              id="name"
-              label="Название"
-              className={classes.textField}
-              value={values.name}
-              onChange={handleChange('name')}
-              margin="normal"
-              variant="outlined"
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-simple">Группа мышц</InputLabel>
+        <Grid style={styles.mainGrid}>
+          <Form style={styles.container}>
+            <Form.Field>
+              <label>Название</label>
+              <input
+                type="text"
+                placeholder='Введите название упражнения'
+                value={values.name}
+                onChange={handleChange('name')}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Группа мышц</label>
               <Select
-                id="muscleGroup"
                 value={values.muscleGroupId}
-                onChange={handleChange('muscleGroupId')}
-              >
-                {muscleGroupsStore!.muscleGroups.map((item: IMuscleGroup) => {
-                  return <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
+                onChange={handleSelectChange}
+                placeholder='Выберите группу мышц'
+                options={muscleGroupsStore!.muscleGroups.map((item: IMuscleGroup) => {
+                  return {key: item.id, value: item.id, text: item.name}
                 })}
-              </Select>
-            </FormControl>
-            <TextField
-              id="weight"
-              type="number"
-              label="Вес"
-              className={classes.textField}
-              value={values.weight}
-              onChange={handleChange('weight')}
-              margin="normal"
-              variant="outlined"
-            />
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Вес</label>
+              <input
+                type="number"
+                placeholder='Введите вес'
+                value={values.weight}
+                onChange={handleChange('weight')}
+              />
+            </Form.Field>
             {exercisesStore!.isLoading ? <Spinner /> :
               <Button
-                variant="contained"
-                color="primary"
-                className={classes.submitBtn}
+               primary
+                style={styles.submitBtn}
                 onClick={submitForm}
               >
                 {editedExercise ? 'Сохранить' : 'Добавить'}
               </Button>
             }
-          </form>
+          </Form>
         </Grid>
       }
     </>

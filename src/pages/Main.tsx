@@ -1,18 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import {
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  makeStyles,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { Button, Card, Divider, Grid, Header, List, } from 'semantic-ui-react';
 
 import Spinner from '../shared/Spinner/Spinner';
 import { IWeekSchedule } from '../models/week-schedule.interface';
@@ -40,25 +29,24 @@ interface IProps {
   }
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const styles = {
   mainGrid: {
-    marginTop: theme.spacing(3),
+    padding: '3em',
   },
   scheduleBtn: {
-    marginLeft: theme.spacing(5),
+    marginLeft: '5em',
   },
   scheduleCard: {
-    margin: theme.spacing(3),
+    margin: '3em',
+    padding: '2em'
   },
-  title: {
-    marginLeft: theme.spacing(3),
-  },
-}));
+  listItem: {
+    lineHeight: 1.5
+  }
+};
 
 const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', 'weekScheduleStore')(
   observer(({ exercisesStore, muscleGroupsStore, weekScheduleStore }) => {
-
-  const classes = useStyles();
 
   useEffect(() => {
     weekScheduleStore.getWeekSchedule();
@@ -75,75 +63,65 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
     <>
       {(weekScheduleStore.isLoading || exercisesStore.isLoading || muscleGroupsStore.isLoading) ? <Spinner />
         : (
-          <Grid container className={classes.mainGrid}>
-            <Typography variant="h5" gutterBottom className={classes.title}>
-              Расписание
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.scheduleBtn}
-              //onClick={generateSchedule}
-            >
-              Сгенерировать расписание
-            </Button>
+          <Grid style={styles.mainGrid}>
+            <Grid.Row>
+              <Header as="h1">
+                Расписание
+              </Header>
+              <Button
+                primary
+                style={styles.scheduleBtn}
+                onClick={generateSchedule}
+              >
+                Сгенерировать расписание
+              </Button>
+            </Grid.Row>
             <Divider />
-            <Grid container>
-              <Grid item xs={4}>
-                <Card className={classes.scheduleCard}>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Понедельник
-                    </Typography>
-                    <List>
-                      {weekScheduleStore.weekSchedule.firstDay.map((item: string) => {
-                        return (
-                          <ListItem key={item}>
-                            <Typography>{item}</Typography>
-                          </ListItem>
-                        )
-                      })}
-                    </List>
-                  </CardContent>
+            <Grid.Row columns={3}>
+              <Grid.Column >
+                <Card style={styles.scheduleCard}>
+                  <Card.Content header='Понедельник' />
+                  <List as='ol'>
+                    {weekScheduleStore.weekSchedule.firstDay.map((item: string) => {
+                      return (
+                        <List.Item as='li' key={item}>
+                          <span style={styles.listItem}>{item}</span>
+                        </List.Item>
+                      )
+                    })}
+                  </List>
                 </Card>
-              </Grid>
-              <Grid component="div" item xs={4}>
-                <Card className={classes.scheduleCard}>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Среда
-                    </Typography>
-                    <List>
-                      {weekScheduleStore.weekSchedule.secondDay.map((item: string) => {
-                        return (
-                          <ListItem key={item}>
-                            <Typography>{item}</Typography>
-                          </ListItem>
-                        )
-                      })}
-                    </List>
-                  </CardContent>
+              </Grid.Column>
+              <Grid.Column >
+                <Card style={styles.scheduleCard}>
+                  <Card.Content header='Среда' />
+                  <List as='ol'>
+                    {weekScheduleStore.weekSchedule.secondDay.map((item: string) => {
+                      return (
+                        <List.Item as='li' key={item}>
+                          <span style={styles.listItem}>{item}</span>
+                        </List.Item>
+                      )
+                    })}
+                  </List>
                 </Card>
-              </Grid>
-              <Grid item xs={4}>
-                <Card className={classes.scheduleCard}>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Понедельник
-                    </Typography>
-                    <List>
-                      {weekScheduleStore.weekSchedule.thirdDay.map((item: string) => {
-                        return (
-                          <ListItem key={item}>
-                            <Typography>{item}</Typography>
-                          </ListItem>
-                        )
-                      })}
-                    </List>
-                  </CardContent>
+              </Grid.Column>
+              <Grid.Column >
+                <Card style={styles.scheduleCard}>
+                  <Card.Content header='Пятница' />
+                  <List as='ol'>
+                    {weekScheduleStore.weekSchedule.thirdDay.map((item: string) => {
+                      return (
+                        <List.Item as='li' key={item}>
+                          <span style={styles.listItem}>{item}</span>
+                        </List.Item>
+                      )
+                    })}
+                  </List>
                 </Card>
-              </Grid>
-            </Grid>
+              </Grid.Column>
+
+            </Grid.Row>
           </Grid>
         )
       }
