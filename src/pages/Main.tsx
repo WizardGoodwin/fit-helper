@@ -83,7 +83,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
               variant="contained"
               color="primary"
               className={classes.scheduleBtn}
-              //onClick={generateSchedule}
+              onClick={generateSchedule}
             >
               Сгенерировать расписание
             </Button>
