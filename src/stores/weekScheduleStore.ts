@@ -18,7 +18,7 @@ class WeekScheduleStore {
     this.isLoading = true;
     this.error = null;
     return axios.get('/week-schedule/1')
-      .then(action((response: AxiosResponse) => { this.weekSchedule = response.data }))
+      .then(action((response: AxiosResponse) => { this.weekSchedule = response.data.weekSchedule }))
       .catch(action((error: any) => {
         this.error = error;
       }))
