@@ -14,7 +14,7 @@ class MuscleGroupsStore {
     this.isLoading = true;
     this.error = null;
     return axios.get('/muscle-groups')
-      .then(action((response: AxiosResponse) => { this.muscleGroups = response.data; }))
+      .then(action((response: AxiosResponse) => { this.muscleGroups = response.data.muscleGroups; }))
       .catch(action((error: any) => {
         this.error = error;
       }))

@@ -17,7 +17,7 @@ class ExercisesStore {
     this.isLoading = true;
     this.error = null;
     return axios.get('/exercises')
-      .then(action((response: AxiosResponse) => { this.exercises = response.data; }))
+      .then(action((response: AxiosResponse) => { this.exercises = response.data.exercises; }))
       .catch(action((error: any) => {
         this.error = error;
       }))
