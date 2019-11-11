@@ -18,7 +18,7 @@ import Spinner from '../shared/Spinner/Spinner';
 import { IWeekSchedule } from '../models/week-schedule.interface';
 import { IExercise } from '../models/exercise.interface';
 import { IMuscleGroup } from '../models/muscle-group.interface';
-import { getRandomSchedule } from '../shared/utils';
+import { exportData, getRandomSchedule } from '../shared/utils';
 
 
 interface IProps {
@@ -71,6 +71,10 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
     weekScheduleStore.updateWeekSchedule(generatedSchedule);
   };
 
+  const exportSchedule = () => {
+    exportData(weekScheduleStore.weekSchedule);
+  };
+
   return (
     <>
       {(weekScheduleStore.isLoading || exercisesStore.isLoading || muscleGroupsStore.isLoading) ? <Spinner />
@@ -86,6 +90,14 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
               onClick={generateSchedule}
             >
               Сгенерировать расписание
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.scheduleBtn}
+              onClick={exportSchedule}
+            >
+              Экспорт в xls
             </Button>
             <Divider />
             <Grid container>
