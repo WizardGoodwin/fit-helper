@@ -7,32 +7,57 @@ import { IWeekSchedule } from '../models/week-schedule.interface';
 
 export const getRandomSchedule = (exercises: IExercise[], muscleGroups: IMuscleGroup[]): IWeekSchedule => {
   const weekSchedule: IWeekSchedule = {
-    firstDay: [],
-    secondDay: [],
-    thirdDay: []
+    firstDay: {
+      mainRound: [],
+      additionalRound: []
+    },
+    secondDay: {
+      mainRound: [],
+      additionalRound: []
+    },
+    thirdDay: {
+      mainRound: [],
+      additionalRound: []
+    },
   };
 
-  let _exercises: IExercise[] = exercises;
+  let mainExercises: IExercise[] = exercises.filter((e: IExercise) => e.isMain);
+  let additionalExercises: IExercise[] = exercises.filter((e: IExercise) => !e.isMain);
 
   muscleGroups.forEach((item) => {
-    const filteredExercises = getExercisesFilteredByGroupId(_exercises, item.id);
-    const randomExercise = getRandomExercise(filteredExercises);
-    _exercises = _exercises.filter((item: IExercise) => item.id !== randomExercise.id);
-    weekSchedule.firstDay.push(randomExercise.name);
+    const mainFilteredExercises = getExercisesFilteredByGroupId(mainExercises, item.id);
+    const randomMainExercise = getRandomExercise(mainFilteredExercises);
+    mainExercises = mainExercises.filter((item: IExercise) => item.id !== randomMainExercise.id);
+    weekSchedule.firstDay.mainRound.push(randomMainExercise.name);
+
+    const addFilteredExercises = getExercisesFilteredByGroupId(additionalExercises, item.id);
+    const randomAddExercise = getRandomExercise(addFilteredExercises);
+    additionalExercises = additionalExercises.filter((item: IExercise) => item.id !== randomAddExercise.id);
+    weekSchedule.firstDay.additionalRound.push(randomAddExercise.name);
   });
 
   muscleGroups.forEach((item) => {
-    const filteredExercises = getExercisesFilteredByGroupId(_exercises, item.id);
-    const randomExercise = getRandomExercise(filteredExercises);
-    _exercises = _exercises.filter((item: IExercise) => item.id !== randomExercise.id);
-    weekSchedule.secondDay.push(randomExercise.name);
+    const mainFilteredExercises = getExercisesFilteredByGroupId(mainExercises, item.id);
+    const randomMainExercise = getRandomExercise(mainFilteredExercises);
+    mainExercises = mainExercises.filter((item: IExercise) => item.id !== randomMainExercise.id);
+    weekSchedule.secondDay.mainRound.push(randomMainExercise.name);
+
+    const addFilteredExercises = getExercisesFilteredByGroupId(additionalExercises, item.id);
+    const randomAddExercise = getRandomExercise(addFilteredExercises);
+    additionalExercises = additionalExercises.filter((item: IExercise) => item.id !== randomAddExercise.id);
+    weekSchedule.secondDay.additionalRound.push(randomAddExercise.name);
   });
 
   muscleGroups.forEach((item) => {
-    const filteredExercises = getExercisesFilteredByGroupId(_exercises, item.id);
-    const randomExercise = getRandomExercise(filteredExercises);
-    _exercises = _exercises.filter((item: IExercise) => item.id !== randomExercise.id);
-    weekSchedule.thirdDay.push(randomExercise.name);
+    const mainFilteredExercises = getExercisesFilteredByGroupId(mainExercises, item.id);
+    const randomMainExercise = getRandomExercise(mainFilteredExercises);
+    mainExercises = mainExercises.filter((item: IExercise) => item.id !== randomMainExercise.id);
+    weekSchedule.thirdDay.mainRound.push(randomMainExercise.name);
+
+    const addFilteredExercises = getExercisesFilteredByGroupId(additionalExercises, item.id);
+    const randomAddExercise = getRandomExercise(addFilteredExercises);
+    additionalExercises = additionalExercises.filter((item: IExercise) => item.id !== randomAddExercise.id);
+    weekSchedule.thirdDay.additionalRound.push(randomAddExercise.name);
   });
 
   return weekSchedule;
@@ -96,12 +121,24 @@ const getExercisesFilteredByGroupId = (exercises: IExercise[], groupId: number):
 const convertScheduleToArray = (schedule: IWeekSchedule): any[] => {
   const resultArray = [
     ['Понедельник', 'Среда', 'Пятница'],
+    ['Основные', 'Основные', 'Основные'],
   ];
-  for (let i = 0; i < schedule.firstDay.length; i++) {
+
+  for (let i = 0; i < schedule.firstDay.mainRound.length; i++) {
     resultArray.push([
-      schedule.firstDay[i],
-      schedule.secondDay[i],
-      schedule.thirdDay[i],
+      schedule.firstDay.mainRound[i],
+      schedule.secondDay.mainRound[i],
+      schedule.thirdDay.mainRound[i],
+    ])
+  }
+
+  resultArray.push(['Вспомогательные', 'Вспомогательные', 'Вспомогательные']);
+
+  for (let i = 0; i < schedule.firstDay.additionalRound.length; i++) {
+    resultArray.push([
+      schedule.firstDay.additionalRound[i],
+      schedule.secondDay.additionalRound[i],
+      schedule.thirdDay.additionalRound[i],
     ])
   }
 

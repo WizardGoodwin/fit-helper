@@ -1,5 +1,14 @@
 export interface IWeekSchedule {
- firstDay: string[];
- secondDay: string[];
- thirdDay: string[];
+  firstDay: {
+    mainRound: string[];
+    additionalRound: string[];
+  };
+  secondDay: {
+    mainRound: string[];
+    additionalRound: string[];
+  };
+  thirdDay: {
+    mainRound: string[];
+    additionalRound: string[];
+  };
 }
