@@ -42,6 +42,9 @@ const Header = () => {
           <Link component={RouterLink} to="/exercises/add" color="inherit" variant="button" className={classes.toolbarLink}>
             Добавить упражнение
           </Link>
+          <Link component={RouterLink} to="/registration" color="inherit" variant="button" className={classes.toolbarLink}>
+            Регистрация
+          </Link>
         </nav>
       </Toolbar>
     </AppBar>

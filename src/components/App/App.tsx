@@ -6,6 +6,7 @@ import Layout from '../Layout/Layot';
 import Main from '../../pages/Main';
 import ExerciseList from '../../pages/ExerciseList';
 import AddExercise from '../../pages/AddExercise';
+import Registration from '../../pages/Registration';
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/" exact component={Main} />
         <Route path="/exercises" exact component={ExerciseList} />
         <Route path="/exercises/add" component={AddExercise} />
+        <Route path="/registration" component={Registration} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       display: 'flex',
       flexDirection: 'column',
-      maxWidth: '500px'
+      width: '400px'
     },
     textField: {
       marginLeft: theme.spacing(1),
@@ -58,7 +58,8 @@ const useStyles = makeStyles((theme: Theme) =>
     mainGrid: {
       marginTop: theme.spacing(3),
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     formControl: {
       margin: theme.spacing(1),
@@ -136,7 +137,7 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
               variant="outlined"
             />
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-simple">Группа мышц</InputLabel>
+              <InputLabel htmlFor="muscleGroup">Группа мышц</InputLabel>
               <Select
                 id="muscleGroup"
                 value={values.muscleGroupId}

@@ -9,7 +9,8 @@ const useStyles = makeStyles((theme: Theme) =>
     mainGrid: {
       marginTop: theme.spacing(3),
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      alignItems: 'center'
     }
   }),
 );
