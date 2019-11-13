@@ -45,6 +45,9 @@ const Header = () => {
           <Link component={RouterLink} to="/registration" color="inherit" variant="button" className={classes.toolbarLink}>
             Регистрация
           </Link>
+          <Link component={RouterLink} to="/login" color="inherit" variant="button" className={classes.toolbarLink}>
+            Вход
+          </Link>
         </nav>
       </Toolbar>
     </AppBar>

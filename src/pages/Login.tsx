@@ -14,8 +14,6 @@ import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 interface IState {
   username: string;
   password: string;
-  fullName: string;
-  email: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,14 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Registration: FC = () => {
+const Login: FC = () => {
   const classes = useStyles();
 
   const initialState: IState = {
     username: '',
     password: '',
-    fullName: '',
-    email: ''
   };
 
   const [values, setValues] = useState<IState>(initialState);
@@ -72,7 +68,7 @@ const Registration: FC = () => {
     <>
         <Grid container className={classes.mainGrid}>
           <Typography variant="h5" gutterBottom>
-            Регистрация
+            Вход
           </Typography>
           <Divider />
           <ValidatorForm
@@ -102,33 +98,13 @@ const Registration: FC = () => {
               validators={['required']}
               errorMessages={['Это поле обязательное']}
             />
-            <TextValidator
-              name="fullName"
-              label="Полное имя"
-              className={classes.textField}
-              value={values.fullName}
-              onChange={handleChange('fullName')}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextValidator
-              name="email"
-              label="Email"
-              className={classes.textField}
-              value={values.email}
-              onChange={handleChange('email')}
-              margin="normal"
-              variant="outlined"
-              validators={['isEmail']}
-              errorMessages={['Введите корректную почту']}
-            />
             <Button
               variant="contained"
               color="primary"
               className={classes.submitBtn}
               type="submit"
             >
-              Зарегистрироваться
+              Войти
             </Button>
           </ValidatorForm>
         </Grid>
@@ -137,4 +113,4 @@ const Registration: FC = () => {
   );
 };
 
-export default Registration;
+export default Login;
