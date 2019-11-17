@@ -10,10 +10,23 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import { IUser } from '../models/user.interface';
+import { inject, observer } from 'mobx-react';
+import Spinner from '../shared/Spinner/Spinner';
+import { Redirect } from 'react-router';
 
 interface IState {
   username: string;
   password: string;
+}
+
+interface IProps {
+  userStore: {
+    isLoading: boolean;
+    isLoggedIn: boolean;
+    error: string | null;
+    login: (loginData: IUser) => any;
+  };
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,11 +52,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     submitBtn: {
       marginTop: theme.spacing(3),
+    },
+    errorText: {
+      color: theme.palette.error.main,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      fontSize: 12,
     }
   }),
 );
 
-const Login: FC = () => {
+const Login: FC<IProps> = inject('userStore')(
+  observer(({
+    userStore,
+  }) => {
   const classes = useStyles();
 
   const initialState: IState = {
@@ -60,44 +82,48 @@ const Login: FC = () => {
     });
   };
 
-  const submitForm = () => {
-    console.log(values);
-  };
+  const submitForm = () => userStore.login(values);
 
   return (
     <>
-        <Grid container className={classes.mainGrid}>
-          <Typography variant="h5" gutterBottom>
-            Вход
-          </Typography>
-          <Divider />
-          <ValidatorForm
-            className={classes.regForm}
-            onSubmit={submitForm}
-          >
-            <TextValidator
-              name="username"
-              label="Логин"
-              className={classes.textField}
-              value={values.username}
-              onChange={handleChange('username')}
-              margin="normal"
-              variant="outlined"
-              validators={['required']}
-              errorMessages={['Это поле обязательное']}
-            />
-            <TextValidator
-              name="password"
-              label="Пароль"
-              type="password"
-              className={classes.textField}
-              value={values.password}
-              onChange={handleChange('password')}
-              margin="normal"
-              variant="outlined"
-              validators={['required']}
-              errorMessages={['Это поле обязательное']}
-            />
+      <Grid container className={classes.mainGrid}>
+        <Typography variant="h5" gutterBottom>
+          Вход
+        </Typography>
+        <Divider />
+        <ValidatorForm
+          className={classes.regForm}
+          onSubmit={submitForm}
+        >
+          <TextValidator
+            name="username"
+            label="Логин"
+            className={classes.textField}
+            value={values.username}
+            onChange={handleChange('username')}
+            margin="normal"
+            variant="outlined"
+            validators={['required']}
+            errorMessages={['Это поле обязательное']}
+          />
+          <TextValidator
+            name="password"
+            label="Пароль"
+            type="password"
+            className={classes.textField}
+            value={values.password}
+            onChange={handleChange('password')}
+            margin="normal"
+            variant="outlined"
+            validators={['required']}
+            errorMessages={['Это поле обязательное']}
+          />
+          {userStore.error && (
+            <Typography variant="body1" gutterBottom className={classes.errorText}>
+              {userStore.error}
+            </Typography>
+          )}
+          {userStore.isLoading ? <Spinner /> : (
             <Button
               variant="contained"
               color="primary"
@@ -106,11 +132,12 @@ const Login: FC = () => {
             >
               Войти
             </Button>
-          </ValidatorForm>
-        </Grid>
+          )}
+        </ValidatorForm>
+      </Grid>
+      {userStore.isLoggedIn && <Redirect to='/exercises' />}
     </>
-
   );
-};
+}));
 
 export default Login;

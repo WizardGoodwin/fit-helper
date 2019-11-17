@@ -18,7 +18,8 @@ import Spinner from '../shared/Spinner/Spinner';
 import { IWeekSchedule } from '../models/week-schedule.interface';
 import { IExercise } from '../models/exercise.interface';
 import { IMuscleGroup } from '../models/muscle-group.interface';
-import { exportData, getRandomSchedule } from '../shared/utils';
+import { exportData, getRandomSchedule } from '../shared/utils/misc';
+import { isUserLoggedIn } from '../shared/utils/cookie';
 
 
 interface IProps {
@@ -64,10 +65,10 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
   const classes = useStyles();
 
   useEffect(() => {
-    weekScheduleStore.getWeekSchedule();
-    exercisesStore.getExercises();
-    muscleGroupsStore.getMuscleGroups();
-  }, []);
+      muscleGroupsStore.getMuscleGroups();
+      exercisesStore.getExercises();
+      //weekScheduleStore.getWeekSchedule();
+  }, [isUserLoggedIn()]);
 
   const generateSchedule = () => {
     const generatedSchedule: IWeekSchedule = getRandomSchedule(exercisesStore.exercises, muscleGroupsStore.muscleGroups);

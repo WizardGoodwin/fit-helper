@@ -1,5 +1,7 @@
 import React, { ChangeEvent, FC, useState } from 'react';
+import { Redirect } from 'react-router';
 
+import { inject, observer } from 'mobx-react';
 import {
   Button,
   createStyles,
@@ -11,11 +13,23 @@ import {
 } from '@material-ui/core';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
+import { IUser } from '../models/user.interface';
+import Spinner from '../shared/Spinner/Spinner';
+
 interface IState {
   username: string;
   password: string;
   fullName: string;
   email: string;
+}
+
+interface IProps {
+  userStore: {
+    isLoading: boolean;
+    isRegistered: boolean;
+    error: string | null;
+    register: (regData: IUser) => any;
+  };
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,11 +55,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     submitBtn: {
       marginTop: theme.spacing(3),
+    },
+    errorText: {
+      color: theme.palette.error.main,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      fontSize: 12,
     }
   }),
 );
 
-const Registration: FC = () => {
+const Registration: FC<IProps> = inject('userStore')(
+  observer(({
+    userStore,
+  }) => {
   const classes = useStyles();
 
   const initialState: IState = {
@@ -64,64 +87,68 @@ const Registration: FC = () => {
     });
   };
 
-  const submitForm = () => {
-    console.log(values);
-  };
+  const submitForm = () => userStore.register(values);
 
   return (
     <>
-        <Grid container className={classes.mainGrid}>
-          <Typography variant="h5" gutterBottom>
-            Регистрация
-          </Typography>
-          <Divider />
-          <ValidatorForm
-            className={classes.regForm}
-            onSubmit={submitForm}
-          >
-            <TextValidator
-              name="username"
-              label="Логин"
-              className={classes.textField}
-              value={values.username}
-              onChange={handleChange('username')}
-              margin="normal"
-              variant="outlined"
-              validators={['required']}
-              errorMessages={['Это поле обязательное']}
-            />
-            <TextValidator
-              name="password"
-              label="Пароль"
-              type="password"
-              className={classes.textField}
-              value={values.password}
-              onChange={handleChange('password')}
-              margin="normal"
-              variant="outlined"
-              validators={['required']}
-              errorMessages={['Это поле обязательное']}
-            />
-            <TextValidator
-              name="fullName"
-              label="Полное имя"
-              className={classes.textField}
-              value={values.fullName}
-              onChange={handleChange('fullName')}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextValidator
-              name="email"
-              label="Email"
-              className={classes.textField}
-              value={values.email}
-              onChange={handleChange('email')}
-              margin="normal"
-              variant="outlined"
-              validators={['isEmail']}
-              errorMessages={['Введите корректную почту']}
-            />
+      <Grid container className={classes.mainGrid}>
+        <Typography variant="h5" gutterBottom>
+          Регистрация
+        </Typography>
+        <Divider />
+        <ValidatorForm
+          className={classes.regForm}
+          onSubmit={submitForm}
+        >
+          <TextValidator
+            name="username"
+            label="Логин"
+            className={classes.textField}
+            value={values.username}
+            onChange={handleChange('username')}
+            margin="normal"
+            variant="outlined"
+            validators={['required']}
+            errorMessages={['Это поле обязательное']}
+          />
+          <TextValidator
+            name="password"
+            label="Пароль"
+            type="password"
+            className={classes.textField}
+            value={values.password}
+            onChange={handleChange('password')}
+            margin="normal"
+            variant="outlined"
+            validators={['required']}
+            errorMessages={['Это поле обязательное']}
+          />
+          <TextValidator
+            name="fullName"
+            label="Полное имя"
+            className={classes.textField}
+            value={values.fullName}
+            onChange={handleChange('fullName')}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextValidator
+            name="email"
+            label="Email"
+            className={classes.textField}
+            value={values.email}
+            onChange={handleChange('email')}
+            margin="normal"
+            variant="outlined"
+            validators={['isEmail']}
+            errorMessages={['Введите корректную почту']}
+          />
+          {userStore.error && (
+            <Typography variant="body1" gutterBottom className={classes.errorText}>
+              {userStore.error}
+            </Typography>
+          )}
+          {userStore.isLoading ? <Spinner /> : (
             <Button
               variant="contained"
               color="primary"
@@ -130,11 +157,12 @@ const Registration: FC = () => {
             >
               Зарегистрироваться
             </Button>
-          </ValidatorForm>
-        </Grid>
+          )}
+        </ValidatorForm>
+      </Grid>
+      {userStore.isRegistered && <Redirect to='/exercises' />}
     </>
-
   );
-};
+}));
 
 export default Registration;

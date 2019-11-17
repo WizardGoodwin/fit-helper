@@ -30,6 +30,9 @@ interface IProps {
     muscleGroups: IMuscleGroup[];
     isLoading: boolean;
     getMuscleGroups: () => any;
+  },
+  userStore: {
+    clearState: () => any;
   }
 }
 
@@ -113,8 +116,8 @@ const ExpansionPanelDetails = withStyles((theme: Theme) => ({
 }))(MuiExpansionPanelDetails);
 
 
-const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
-  observer(({ exercisesStore, muscleGroupsStore }) => {
+const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', 'userStore')(
+  observer(({ exercisesStore, muscleGroupsStore, userStore }) => {
 
   const classes = useStyles();
 
@@ -125,6 +128,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
 
 
   useEffect(() => {
+    userStore.clearState();
     exercisesStore.getExercises();
     muscleGroupsStore.getMuscleGroups();
   }, []);

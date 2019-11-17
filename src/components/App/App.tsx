@@ -8,15 +8,16 @@ import ExerciseList from '../../pages/ExerciseList';
 import AddExercise from '../../pages/AddExercise';
 import Registration from '../../pages/Registration';
 import Login from '../../pages/Login';
+import PrivateRoute from '../../shared/PrivateRoute/PrivateRoute';
 
 
 const App = () => {
   return (
     <Layout>
       <Switch>
-        <Route path="/" exact component={Main} />
-        <Route path="/exercises" exact component={ExerciseList} />
-        <Route path="/exercises/add" component={AddExercise} />
+        <PrivateRoute path="/" exact component={Main} />
+        <PrivateRoute path="/exercises" exact component={ExerciseList} />
+        <PrivateRoute path="/exercises/add" component={AddExercise} />
         <Route path="/login" component={Login} />
         <Route path="/registration" component={Registration} />
         <Route component={NotFound} />

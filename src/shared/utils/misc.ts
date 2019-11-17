@@ -1,9 +1,9 @@
 import { saveAs } from 'file-saver';
 import XLSX from 'xlsx';
 
-import { IExercise } from '../models/exercise.interface';
-import { IMuscleGroup } from '../models/muscle-group.interface';
-import { IWeekSchedule } from '../models/week-schedule.interface';
+import { IExercise } from '../../models/exercise.interface';
+import { IMuscleGroup } from '../../models/muscle-group.interface';
+import { IWeekSchedule } from '../../models/week-schedule.interface';
 
 export const getRandomSchedule = (exercises: IExercise[], muscleGroups: IMuscleGroup[]): IWeekSchedule => {
   const weekSchedule: IWeekSchedule = {

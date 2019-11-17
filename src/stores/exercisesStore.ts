@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import axios from'../axios';
+import axios from '../shared/utils/axios';
 import { AxiosResponse } from 'axios';
 
 import { IExercise } from '../models/exercise.interface';

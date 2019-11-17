@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from 'react';
+import React, { FC } from 'react';
 
 import Header from '../Header/Header';
 
@@ -6,14 +6,14 @@ interface IProps {
   children: any;
 }
 
-const Layout: FunctionComponent<IProps> = (props) => {
+const Layout: FC<IProps> = (props) => {
   return (
-    <Fragment>
+    <>
       <Header />
       <main>
         {props.children}
       </main>
-    </Fragment>
+    </>
   );
 };
 

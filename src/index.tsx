@@ -7,6 +7,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import exercisesStore from './stores/exercisesStore';
 import muscleGroupsStore from './stores/muscleGroupsStore';
 import weekScheduleStore from './stores/weekScheduleStore';
+import userStore from './stores/userStore';
 import theme from './theme';
 import App from './components/App/App';
 
@@ -14,6 +15,7 @@ const stores = {
   exercisesStore,
   muscleGroupsStore,
   weekScheduleStore,
+  userStore
 };
 
 ReactDOM.render(
