@@ -64,13 +64,18 @@ const Header: FC<IProps> = ({ history }) => {
         </nav>
         <nav>
           {isUserLoggedIn() ? (
-            <Button
-              variant="text"
-              className={classes.logoutBtn}
-              onClick={handleLogout}
-            >
-              Выйти
-            </Button>
+            <>
+              <Link component={RouterLink} to="/profile" color="inherit" variant="button" className={classes.toolbarLink}>
+                Профиль
+              </Link>
+              <Button
+                variant="text"
+                className={classes.logoutBtn}
+                onClick={handleLogout}
+              >
+                Выйти
+              </Button>
+            </>
           ) : (
             <>
               <Link component={RouterLink} to="/registration" color="inherit" variant="button" className={classes.toolbarLink}>

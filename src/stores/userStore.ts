@@ -4,13 +4,16 @@ import { AxiosResponse } from 'axios';
 
 import { IUser } from '../models/user.interface';
 import { clearCookies, setCookie } from '../shared/utils/cookie';
+import { IExercise } from '../models/exercise.interface';
 
 class UserStore {
 
   @observable user: IUser = { username: '' };
   @observable isLoading = false;
+  @observable isUpdating = false;
   @observable isRegistered = false;
   @observable isLoggedIn = false;
+  @observable isUpdated = false;
   @observable error: string | null = null;
 
   @action login(loginData: IUser) {
@@ -51,10 +54,40 @@ class UserStore {
     clearCookies();
   }
 
+  @action getUser() {
+    this.isLoading = true;
+    this.error = null;
+    return axios.get('/user')
+      .then(action((response: AxiosResponse) => { this.user = response.data.user; }))
+      .catch(action((error: any) => {
+        this.error = error;
+      }))
+      .finally(action(() => { this.isLoading = false; }));
+  }
+
+  @action updateUser(user: IUser) {
+    this.isUpdated = false;
+    this.isUpdating = true;
+    this.error = null;
+    return axios.put('/user', user)
+      .then(action(() => {
+        this.user = { ...user };
+        this.isUpdated = true;
+      }))
+      .catch(action((error: any) => {
+        this.error = error;
+      }))
+      .finally(action(() => {
+        this.isUpdating = false;
+      }));
+  }
+
   @action clearState() {
     this.isLoading = false;
     this.isRegistered = false;
     this.isLoggedIn = false;
+    this.isUpdated = false;
+    this.isUpdating = false;
   }
 }
 
