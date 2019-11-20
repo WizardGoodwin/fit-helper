@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { IReactComponent } from 'mobx-react';
-import axios from '../../shared/utils/axios';
+import axios from '../../utils/axios';
 
-import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
+import ErrorIndicator from '../../components/shared/ErrorIndicator/ErrorIndicator';
 
 const withErrorHandler = (WrappedComponent: IReactComponent) => {
   return class extends Component {

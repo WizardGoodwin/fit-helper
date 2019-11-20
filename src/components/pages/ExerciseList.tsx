@@ -11,16 +11,18 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import { IExercise } from '../models/exercise.interface';
-import { IMuscleGroup } from '../models/muscle-group.interface';
-import Spinner from '../shared/Spinner/Spinner';
-import ExerciseForm from '../components/ExerciseForm/ExerciseForm';
+import { IExercise } from '../../models/exercise.interface';
+import { IMuscleGroup } from '../../models/muscle-group.interface';
+import Spinner from '../shared/Spinner';
+import ExerciseForm from '../shared/ExerciseForm';
+import Snackbar from '../shared/Snackbar';
 
 
 interface IProps {
   exercisesStore: {
     exercises: IExercise[];
     isLoading: boolean;
+    isUpdated: boolean;
     isDeleted: boolean;
     getExercises: () => any;
     deleteExercise: (id?: number) => any;
@@ -125,13 +127,27 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [selectedExercise, setSelectedExercise] = useState<IExercise | undefined>(undefined);
-
+  const [snackbar, setSnackbar] = useState({
+    show: false,
+    message: ''
+  });
 
   useEffect(() => {
     userStore.clearState();
     exercisesStore.getExercises();
     muscleGroupsStore.getMuscleGroups();
   }, []);
+
+  useEffect(() => {
+    if (exercisesStore.isDeleted) {
+      setDeleteModalOpen(false);
+      exercisesStore.clearState();
+      setSnackbar({
+        show: true,
+        message: 'Упражнение успешно удалено!'
+      });
+    }
+  }, [exercisesStore.isDeleted]);
 
   const handleChange = (id: number) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? id : false);
@@ -153,10 +169,13 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
     }
   };
 
-  if (exercisesStore.isDeleted) {
-    setDeleteModalOpen(false);
-    exercisesStore.clearState();
-  }
+  const handleEditSuccess = () => {
+    setEditModalOpen(false);
+    setSnackbar({
+      show: true,
+      message: 'Упражнение успешно отредактировано!'
+    });
+  };
 
   return (
     <>
@@ -192,10 +211,10 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
                                 <Typography className={classes.additionalExercise}>Вспомогательное</Typography>
                               )}
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={2}>
                               <Typography>{item.weight} кг</Typography>
                             </Grid>
-                            <Grid container item xs={3} justify="space-between">
+                            <Grid container item xs={2}>
                               <Button
                                 variant="contained"
                                 color="primary"
@@ -203,6 +222,8 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
                                >
                                 Редактировать
                               </Button>
+                            </Grid>
+                            <Grid container item xs={2}>
                               <Button
                                 variant="contained"
                                 color="secondary"
@@ -237,7 +258,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
             <Typography variant="h5" gutterBottom>
               Редактировать упражнение
             </Typography>
-            <ExerciseForm editedExercise={selectedExercise} setModalOpen={setEditModalOpen}/>
+            <ExerciseForm editedExercise={selectedExercise} handleEditSuccess={handleEditSuccess}/>
           </div>
         </Fade>
       </Modal>
@@ -279,6 +300,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
           </div>
         </Fade>
       </Modal>
+      <Snackbar showSnackbar={snackbar.show} message={snackbar.message} />
     </>
   );
 }));

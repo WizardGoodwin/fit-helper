@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { isUserLoggedIn } from '../utils/cookie';
+import { isUserLoggedIn } from '../../utils/cookie';
 import { Redirect, Route } from 'react-router';
 
 interface IProps {

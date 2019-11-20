@@ -11,8 +11,9 @@ import {
 } from '@material-ui/core';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
-import { IUser } from '../models/user.interface';
-import Spinner from '../shared/Spinner/Spinner';
+import { IUser } from '../../models/user.interface';
+import Spinner from '../shared/Spinner';
+import Snackbar from '../shared/Snackbar';
 
 
 interface IState {
@@ -26,6 +27,7 @@ interface IProps {
     user: IUser;
     isLoading: boolean;
     isUpdating: boolean;
+    isUpdated: boolean;
     getUser: () => any;
     updateUser: (user: IUser) => any;
     error: string;
@@ -76,13 +78,19 @@ const Profile: FC<IProps> = inject('userStore')(
 
   const [values, setValues] = useState<IState>(initialState);
 
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
   useEffect(() => {
     userStore.getUser();
   }, []);
 
-    useEffect(() => {
-      setValues(userStore.user);
-    }, [userStore.user]);
+  useEffect(() => {
+    setValues(userStore.user);
+  }, [userStore.user]);
+
+  useEffect(() => {
+    if (userStore.isUpdated) setShowSnackbar(true);
+  }, [userStore.isUpdated]);
 
   const handleChange = (name: keyof typeof values) => (event: ChangeEvent<HTMLInputElement | { name?: string, value: unknown }>) => {
     setValues({
@@ -111,11 +119,9 @@ const Profile: FC<IProps> = inject('userStore')(
               label="Логин"
               className={classes.textField}
               value={values.username}
-              onChange={handleChange('username')}
               margin="normal"
               variant="outlined"
-              validators={['required']}
-              errorMessages={['Это поле обязательное']}
+              disabled
             />
             <TextValidator
               name="fullName"
@@ -169,8 +175,8 @@ const Profile: FC<IProps> = inject('userStore')(
           </ValidatorForm>
         </Grid>
       }
+      <Snackbar showSnackbar={showSnackbar} message='Профиль успешно отредактирован!' />
     </>
-
   );
 }));
 

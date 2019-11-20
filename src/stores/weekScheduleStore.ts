@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import axios from '../shared/utils/axios';
+import axios from '../utils/axios';
 import { AxiosResponse } from 'axios';
 
 import { IWeekSchedule } from '../models/week-schedule.interface';

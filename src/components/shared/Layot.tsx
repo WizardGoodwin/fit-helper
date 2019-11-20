@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import Header from '../Header/Header';
+import Header from './Header';
 
 interface IProps {
   children: any;

@@ -1,15 +1,15 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import NotFound from '../../shared/NotFound/NotFound';
-import Layout from '../Layout/Layot';
-import Main from '../../pages/Main';
-import ExerciseList from '../../pages/ExerciseList';
-import AddExercise from '../../pages/AddExercise';
-import Profile from '../../pages/Profile';
-import Registration from '../../pages/Registration';
-import Login from '../../pages/Login';
-import PrivateRoute from '../../shared/PrivateRoute/PrivateRoute';
+import NotFound from './shared/NotFound/NotFound';
+import Layout from './shared/Layot';
+import Main from './pages/Main';
+import ExerciseList from './pages/ExerciseList';
+import AddExercise from './pages/AddExercise';
+import Profile from './pages/Profile';
+import Registration from './pages/Registration';
+import Login from './pages/Login';
+import PrivateRoute from './shared/PrivateRoute';
 
 
 const App = () => {

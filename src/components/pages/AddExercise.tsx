@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { createStyles, Divider, Grid, makeStyles, Theme, Typography, } from '@material-ui/core';
 
-import ExerciseForm from '../components/ExerciseForm/ExerciseForm';
+import ExerciseForm from '../shared/ExerciseForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,13 +20,13 @@ const AddExercise: FC = () => {
 
   return (
     <>
-        <Grid container className={classes.mainGrid}>
-          <Typography variant="h5" gutterBottom>
-            Добавить упражнение
-          </Typography>
-          <Divider />
-          <ExerciseForm />
-        </Grid>
+      <Grid container className={classes.mainGrid}>
+        <Typography variant="h5" gutterBottom>
+          Добавить упражнение
+        </Typography>
+        <Divider />
+        <ExerciseForm />
+      </Grid>
     </>
 
   );

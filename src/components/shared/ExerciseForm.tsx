@@ -17,7 +17,8 @@ import {
 
 import { IMuscleGroup } from '../../models/muscle-group.interface';
 import { IExercise } from '../../models/exercise.interface';
-import Spinner from '../../shared/Spinner/Spinner';
+import Spinner from './Spinner';
+import Snackbar from './Snackbar';
 
 
 interface IState {
@@ -42,7 +43,7 @@ interface IProps {
     getMuscleGroups: () => any;
   };
   editedExercise?: IExercise;
-  setModalOpen?: (value: boolean) => any;
+  handleEditSuccess?: () => any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -77,7 +78,7 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   exercisesStore,
   muscleGroupsStore,
   editedExercise,
-  setModalOpen,
+  handleEditSuccess,
 }) => {
   const classes = useStyles();
 
@@ -89,6 +90,8 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
   };
 
   const [values, setValues] = useState<IState>(initialState);
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   useEffect(() => {
     muscleGroupsStore!.getMuscleGroups();
@@ -124,11 +127,12 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
       isMain: false,
     });
     exercisesStore!.clearState();
+    setShowSnackbar(true);
   }
 
   if (exercisesStore!.isUpdated) {
-    setModalOpen!(false);
     exercisesStore!.clearState();
+    handleEditSuccess!();
   }
 
   return (
@@ -191,8 +195,8 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
           </form>
         </Grid>
       }
+      <Snackbar showSnackbar={showSnackbar} message='Упражнение добавлено' />
     </>
-
   );
 }));
 

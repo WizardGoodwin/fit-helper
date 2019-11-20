@@ -3,7 +3,7 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 
 import { AppBar, Toolbar, Link, makeStyles, Typography, Button } from '@material-ui/core';
 
-import { clearCookies, isUserLoggedIn } from '../../shared/utils/cookie';
+import { clearCookies, isUserLoggedIn } from '../../utils/cookie';
 
 interface IProps {
   history: any;

@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
-import { IUser } from '../models/user.interface';
-import Spinner from '../shared/Spinner/Spinner';
+import { IUser } from '../../models/user.interface';
+import Spinner from '../shared/Spinner';
 
 interface IState {
   username: string;
@@ -160,7 +160,10 @@ const Registration: FC<IProps> = inject('userStore')(
           )}
         </ValidatorForm>
       </Grid>
-      {userStore.isRegistered && <Redirect to='/exercises' />}
+      {userStore.isRegistered && <Redirect to={{
+        pathname: '/',
+        state: { message: 'Добро пожаловать, вы успешно зарегистрированы!' }
+      }} />}
     </>
   );
 }));

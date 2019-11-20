@@ -1,9 +1,9 @@
 import { observable, action } from 'mobx';
-import axios from '../shared/utils/axios';
+import axios from '../utils/axios';
 import { AxiosResponse } from 'axios';
 
 import { IUser } from '../models/user.interface';
-import { clearCookies, setCookie } from '../shared/utils/cookie';
+import { clearCookies, setCookie } from '../utils/cookie';
 import { IExercise } from '../models/exercise.interface';
 
 class UserStore {

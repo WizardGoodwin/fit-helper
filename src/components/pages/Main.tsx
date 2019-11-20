@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import {
@@ -14,11 +14,12 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import Spinner from '../shared/Spinner/Spinner';
-import { IWeekSchedule } from '../models/week-schedule.interface';
-import { IExercise } from '../models/exercise.interface';
-import { IMuscleGroup } from '../models/muscle-group.interface';
-import { exportData, getRandomSchedule } from '../shared/utils/misc';
+import Spinner from '../shared/Spinner';
+import { IWeekSchedule } from '../../models/week-schedule.interface';
+import { IExercise } from '../../models/exercise.interface';
+import { IMuscleGroup } from '../../models/muscle-group.interface';
+import { exportData, getRandomSchedule } from '../../utils/misc';
+import Snackbar from '../shared/Snackbar';
 
 
 interface IProps {
@@ -37,7 +38,12 @@ interface IProps {
     isLoading: boolean;
     getWeekSchedule: () => any;
     updateWeekSchedule: (weekSchedule: IWeekSchedule) => any;
-  }
+  },
+  location: {
+    state: {
+      message?: string
+    }
+  };
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -59,9 +65,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', 'weekScheduleStore')(
-  observer(({ exercisesStore, muscleGroupsStore, weekScheduleStore }) => {
+  observer(({ exercisesStore, muscleGroupsStore, weekScheduleStore, location }) => {
 
   const classes = useStyles();
+  const locationState = location.state || {};
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
+  useEffect(() => {
+    if (locationState.message) setShowSnackbar(true);
+  }, [locationState.message]);
 
   useEffect(() => {
       muscleGroupsStore.getMuscleGroups();
@@ -204,6 +217,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
           {/*</Grid>*/}
         </Grid>
       </Grid>
+      <Snackbar showSnackbar={showSnackbar} message={locationState.message} />
     </>
   );
 }));

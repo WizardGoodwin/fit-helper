@@ -9,7 +9,7 @@ import muscleGroupsStore from './stores/muscleGroupsStore';
 import weekScheduleStore from './stores/weekScheduleStore';
 import userStore from './stores/userStore';
 import theme from './theme';
-import App from './components/App/App';
+import App from './components/App';
 
 const stores = {
   exercisesStore,

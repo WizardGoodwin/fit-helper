@@ -10,9 +10,9 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import { IUser } from '../models/user.interface';
+import { IUser } from '../../models/user.interface';
 import { inject, observer } from 'mobx-react';
-import Spinner from '../shared/Spinner/Spinner';
+import Spinner from '../shared/Spinner';
 import { Redirect } from 'react-router';
 
 interface IState {
@@ -135,7 +135,10 @@ const Login: FC<IProps> = inject('userStore')(
           )}
         </ValidatorForm>
       </Grid>
-      {userStore.isLoggedIn && <Redirect to='/exercises' />}
+      {userStore.isLoggedIn && <Redirect to={{
+        pathname: '/',
+        state: { message: 'Вы успешно авторизовались!' }
+      }} />}
     </>
   );
 }));
