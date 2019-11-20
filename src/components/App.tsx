@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import NotFound from './shared/NotFound/NotFound';
+import NotFound from './shared/NotFound';
 import Layout from './shared/Layot';
 import Main from './pages/Main';
 import ExerciseList from './pages/ExerciseList';
