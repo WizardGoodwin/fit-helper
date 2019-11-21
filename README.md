@@ -9,18 +9,28 @@
 ### Frontend
 
 React 
+
 Mobx 
+
 Typescript
+
 Material UI 
+
+[Код проекта на github](https://github.com/WizardGoodwin/fit-helper)
 
 ### Backend
 
 NodeJS
+
 Express
+
 Typescript
+
 Sequelize
+
 Postgres
 
+[Код проекта на github](https://github.com/WizardGoodwin/fit-helper-backend)
 
 ## Реализованный функционал 
 
@@ -31,9 +41,7 @@ Postgres
 
 
 ## Описание работы приложения
-Ознакомиться с приложением можно по адресу [https://reactblog-d7743.firebaseapp.com](https://reactblog-d7743.firebaseapp.com)
-
-
+Ознакомиться с приложением можно по адресу [https://fit-helper.herokuapp.com/](https://fit-helper.herokuapp.com/)
 
 ## Доступные команды
 
