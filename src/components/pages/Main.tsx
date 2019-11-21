@@ -79,7 +79,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
   useEffect(() => {
       muscleGroupsStore.getMuscleGroups();
       exercisesStore.getExercises();
-      //weekScheduleStore.getWeekSchedule();
+      weekScheduleStore.getWeekSchedule();
   }, []);
 
   const generateSchedule = () => {
@@ -137,84 +137,84 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
               <Typography variant="h6" gutterBottom>
                 Вспомогательные упражнения
               </Typography>
-              {/*<List>*/}
-              {/*  {weekScheduleStore.weekSchedule.firstDay.additionalRound.map((item: string) => {*/}
-              {/*    return (*/}
-              {/*      <ListItem key={item}>*/}
-              {/*        <Typography>{item}</Typography>*/}
-              {/*      </ListItem>*/}
-              {/*    )*/}
-              {/*  })}*/}
-              {/*</List>*/}
+              <List>
+                {weekScheduleStore.weekSchedule.firstDay.additionalRound.map((item: string) => {
+                  return (
+                    <ListItem key={item}>
+                      <Typography>{item}</Typography>
+                    </ListItem>
+                  )
+                })}
+              </List>
             </CardContent>
             </Card>
           </Grid>
-          {/*<Grid component="div" item xs={4}>*/}
-          {/*  <Card className={classes.scheduleCard}>*/}
-          {/*    <CardContent>*/}
-          {/*      <Typography variant="h6" gutterBottom className={classes.cardTitle}>*/}
-          {/*        Среда*/}
-          {/*      </Typography>*/}
-          {/*      <Typography variant="h6" gutterBottom>*/}
-          {/*        Основные упражнения*/}
-          {/*      </Typography>*/}
-          {/*      <List>*/}
-          {/*        {weekScheduleStore.weekSchedule.secondDay.mainRound.map((item: string) => {*/}
-          {/*          return (*/}
-          {/*            <ListItem key={item}>*/}
-          {/*              <Typography>{item}</Typography>*/}
-          {/*            </ListItem>*/}
-          {/*          )*/}
-          {/*        })}*/}
-          {/*      </List>*/}
-          {/*      <Typography variant="h6" gutterBottom>*/}
-          {/*        Вспомогательные упражнения*/}
-          {/*      </Typography>*/}
-          {/*      <List>*/}
-          {/*        {weekScheduleStore.weekSchedule.secondDay.additionalRound.map((item: string) => {*/}
-          {/*          return (*/}
-          {/*            <ListItem key={item}>*/}
-          {/*              <Typography>{item}</Typography>*/}
-          {/*            </ListItem>*/}
-          {/*          )*/}
-          {/*        })}*/}
-          {/*      </List>*/}
-          {/*    </CardContent>*/}
-          {/*  </Card>*/}
-          {/*</Grid>*/}
-          {/*<Grid item xs={4}>*/}
-          {/*  <Card className={classes.scheduleCard}>*/}
-          {/*    <CardContent>*/}
-          {/*      <Typography variant="h6" gutterBottom className={classes.cardTitle}>*/}
-          {/*        Пятница*/}
-          {/*      </Typography>*/}
-          {/*      <Typography variant="h6" gutterBottom>*/}
-          {/*        Основные упражнения*/}
-          {/*      </Typography>*/}
-          {/*      <List>*/}
-          {/*        {weekScheduleStore.weekSchedule.thirdDay.mainRound.map((item: string) => {*/}
-          {/*          return (*/}
-          {/*            <ListItem key={item}>*/}
-          {/*              <Typography>{item}</Typography>*/}
-          {/*            </ListItem>*/}
-          {/*          )*/}
-          {/*        })}*/}
-          {/*      </List>*/}
-          {/*      <Typography variant="h6" gutterBottom>*/}
-          {/*        Вспомогательные упражнения*/}
-          {/*      </Typography>*/}
-          {/*      <List>*/}
-          {/*        {weekScheduleStore.weekSchedule.thirdDay.additionalRound.map((item: string) => {*/}
-          {/*          return (*/}
-          {/*            <ListItem key={item}>*/}
-          {/*              <Typography>{item}</Typography>*/}
-          {/*            </ListItem>*/}
-          {/*          )*/}
-          {/*        })}*/}
-          {/*      </List>*/}
-          {/*    </CardContent>*/}
-          {/*  </Card>*/}
-          {/*</Grid>*/}
+          <Grid item xs={4}>
+            <Card className={classes.scheduleCard}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom className={classes.cardTitle}>
+                  Среда
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  Основные упражнения
+                </Typography>
+                <List>
+                  {weekScheduleStore.weekSchedule.secondDay.mainRound.map((item: string) => {
+                    return (
+                      <ListItem key={item}>
+                        <Typography>{item}</Typography>
+                      </ListItem>
+                    )
+                  })}
+                </List>
+                <Typography variant="h6" gutterBottom>
+                  Вспомогательные упражнения
+                </Typography>
+                <List>
+                  {weekScheduleStore.weekSchedule.secondDay.additionalRound.map((item: string) => {
+                    return (
+                      <ListItem key={item}>
+                        <Typography>{item}</Typography>
+                      </ListItem>
+                    )
+                  })}
+                </List>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={4}>
+            <Card className={classes.scheduleCard}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom className={classes.cardTitle}>
+                  Пятница
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  Основные упражнения
+                </Typography>
+                <List>
+                  {weekScheduleStore.weekSchedule.thirdDay.mainRound.map((item: string) => {
+                    return (
+                      <ListItem key={item}>
+                        <Typography>{item}</Typography>
+                      </ListItem>
+                    )
+                  })}
+                </List>
+                <Typography variant="h6" gutterBottom>
+                  Вспомогательные упражнения
+                </Typography>
+                <List>
+                  {weekScheduleStore.weekSchedule.thirdDay.additionalRound.map((item: string) => {
+                    return (
+                      <ListItem key={item}>
+                        <Typography>{item}</Typography>
+                      </ListItem>
+                    )
+                  })}
+                </List>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
       <Snackbar showSnackbar={showSnackbar} message={locationState.message} />
