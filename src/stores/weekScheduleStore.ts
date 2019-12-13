@@ -7,18 +7,9 @@ import { IWeekSchedule } from '../models/week-schedule.interface';
 class WeekScheduleStore {
 
   @observable weekSchedule: IWeekSchedule = {
-    firstDay: {
-      mainRound: [],
-      additionalRound: []
-    },
-    secondDay: {
-      mainRound: [],
-      additionalRound: []
-    },
-    thirdDay: {
-      mainRound: [],
-      additionalRound: []
-    }
+    firstDay: [],
+    secondDay: [],
+    thirdDay: []
   };
   @observable isLoading = false;
   @observable error: string | null = null;

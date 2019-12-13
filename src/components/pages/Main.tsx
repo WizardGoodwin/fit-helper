@@ -21,7 +21,6 @@ import { IMuscleGroup } from '../../models/muscle-group.interface';
 import { exportData, getRandomSchedule } from '../../utils/misc';
 import Snackbar from '../shared/Snackbar';
 
-
 interface IProps {
   exercisesStore: {
     exercises: IExercise[];
@@ -122,23 +121,8 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
               <Typography variant="h6" gutterBottom className={classes.cardTitle}>
                 Понедельник
               </Typography>
-              <Typography variant="h6" gutterBottom>
-                Основные упражнения
-              </Typography>
               <List>
-                {weekScheduleStore.weekSchedule.firstDay.mainRound.map((item: string) => {
-                  return (
-                    <ListItem key={item}>
-                      <Typography>{item}</Typography>
-                    </ListItem>
-                  )
-                })}
-              </List>
-              <Typography variant="h6" gutterBottom>
-                Вспомогательные упражнения
-              </Typography>
-              <List>
-                {weekScheduleStore.weekSchedule.firstDay.additionalRound.map((item: string) => {
+                {weekScheduleStore.weekSchedule.firstDay.map((item: string) => {
                   return (
                     <ListItem key={item}>
                       <Typography>{item}</Typography>
@@ -155,23 +139,8 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
                 <Typography variant="h6" gutterBottom className={classes.cardTitle}>
                   Среда
                 </Typography>
-                <Typography variant="h6" gutterBottom>
-                  Основные упражнения
-                </Typography>
                 <List>
-                  {weekScheduleStore.weekSchedule.secondDay.mainRound.map((item: string) => {
-                    return (
-                      <ListItem key={item}>
-                        <Typography>{item}</Typography>
-                      </ListItem>
-                    )
-                  })}
-                </List>
-                <Typography variant="h6" gutterBottom>
-                  Вспомогательные упражнения
-                </Typography>
-                <List>
-                  {weekScheduleStore.weekSchedule.secondDay.additionalRound.map((item: string) => {
+                  {weekScheduleStore.weekSchedule.secondDay.map((item: string) => {
                     return (
                       <ListItem key={item}>
                         <Typography>{item}</Typography>
@@ -188,23 +157,8 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
                 <Typography variant="h6" gutterBottom className={classes.cardTitle}>
                   Пятница
                 </Typography>
-                <Typography variant="h6" gutterBottom>
-                  Основные упражнения
-                </Typography>
                 <List>
-                  {weekScheduleStore.weekSchedule.thirdDay.mainRound.map((item: string) => {
-                    return (
-                      <ListItem key={item}>
-                        <Typography>{item}</Typography>
-                      </ListItem>
-                    )
-                  })}
-                </List>
-                <Typography variant="h6" gutterBottom>
-                  Вспомогательные упражнения
-                </Typography>
-                <List>
-                  {weekScheduleStore.weekSchedule.thirdDay.additionalRound.map((item: string) => {
+                  {weekScheduleStore.weekSchedule.thirdDay.map((item: string) => {
                     return (
                       <ListItem key={item}>
                         <Typography>{item}</Typography>

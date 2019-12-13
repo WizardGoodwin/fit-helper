@@ -59,20 +59,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   deleteText: {
     margin: theme.spacing(3, 0)
   },
-  mainExercise: {
-    maxWidth: 100,
-    textAlign: 'center',
-    borderRadius: 5,
-    color: '#fff',
-    backgroundColor: theme.palette.primary.main,
-  },
-  additionalExercise: {
-    maxWidth: 150,
-    textAlign: 'center',
-    borderRadius: 5,
-    color: '#fff',
-    backgroundColor: theme.palette.secondary.main,
-  }
 }));
 
 const ExpansionPanel = withStyles({
@@ -201,17 +187,10 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
                       return (
                         <ListItem key={item.id}>
                           <Grid container>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                               <Typography>{item.name}</Typography>
                             </Grid>
-                            <Grid item xs={3}>
-                              {item.isMain ? (
-                                <Typography className={classes.mainExercise}>Основное</Typography>
-                              ) : (
-                                <Typography className={classes.additionalExercise}>Вспомогательное</Typography>
-                              )}
-                            </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                               <Typography>{item.weight} кг</Typography>
                             </Grid>
                             <Grid container item xs={2}>

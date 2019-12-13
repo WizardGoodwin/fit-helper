@@ -3,5 +3,4 @@ export interface IExercise {
   name: string;
   weight: number;
   muscleGroupId: number;
-  isMain: boolean;
 }

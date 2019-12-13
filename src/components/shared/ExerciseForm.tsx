@@ -25,7 +25,6 @@ interface IState {
   name: string;
   muscleGroupId: number;
   weight: number;
-  isMain: boolean;
 }
 
 interface IProps {
@@ -86,7 +85,6 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
     name: '',
     muscleGroupId: 0,
     weight: 0,
-    isMain: false,
   };
 
   const [values, setValues] = useState<IState>(initialState);
@@ -104,13 +102,6 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
     });
   };
 
-  const handleCheckBoxChange = () => {
-    setValues({
-      ...values,
-      isMain: !values.isMain
-    });
-  };
-
   const submitForm = () => {
     if (editedExercise) {
       exercisesStore!.updateExercise(values);
@@ -124,7 +115,6 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
       name: '',
       muscleGroupId: 0,
       weight: 0,
-      isMain: false,
     });
     exercisesStore!.clearState();
     setShowSnackbar(true);
@@ -171,16 +161,6 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
               onChange={handleChange('weight')}
               margin="normal"
               variant="outlined"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={values.isMain}
-                  onChange={handleCheckBoxChange}
-                  color="secondary"
-                />
-              }
-              label="Основное упражнение"
             />
             {exercisesStore!.isLoading ? <Spinner /> :
               <Button
