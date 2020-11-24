@@ -2,14 +2,12 @@ import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import {
-  Backdrop,
-  Button,
-  Divider, Fade, Grid, List, ListItem,
+  Accordion as MuiAccordion,
+  AccordionSummary as MuiAccordionSummary,
+  AccordionDetails as MuiAccordionDetails,
+  Backdrop, Button, Divider, Fade, Grid, List, ListItem,
   makeStyles, Modal, Theme, Typography, withStyles,
 } from '@material-ui/core';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
 import { IExercise } from '../../models/exercise.interface';
 import { IMuscleGroup } from '../../models/muscle-group.interface';
@@ -61,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const ExpansionPanel = withStyles({
+const Accordion = withStyles({
   root: {
     width: '100%',
     border: '1px solid rgba(0, 0, 0, .125)',
@@ -77,9 +75,9 @@ const ExpansionPanel = withStyles({
     },
   },
   expanded: {},
-})(MuiExpansionPanel);
+})(MuiAccordion);
 
-const ExpansionPanelSummary = withStyles({
+const AccordionSummary = withStyles({
   root: {
     backgroundColor: 'rgba(0, 0, 0, .03)',
     borderBottom: '1px solid rgba(0, 0, 0, .125)',
@@ -95,13 +93,13 @@ const ExpansionPanelSummary = withStyles({
     },
   },
   expanded: {},
-})(MuiExpansionPanelSummary);
+})(MuiAccordionSummary);
 
-const ExpansionPanelDetails = withStyles((theme: Theme) => ({
+const AccordionDetails = withStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(2),
   },
-}))(MuiExpansionPanelDetails);
+}))(MuiAccordionDetails);
 
 
 const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', 'userStore')(
@@ -173,14 +171,14 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
         <Divider />
         {muscleGroupsStore.muscleGroups.map((group: IMuscleGroup) => {
           return (
-            <ExpansionPanel
+            <Accordion
               square expanded={expanded === group.id}
               onChange={handleChange(group.id)} key={group.id}
             >
-              <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
+              <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                 <Typography>{group.name}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
+              </AccordionSummary>
+              <AccordionDetails>
                 <List className={classes.exerciseList}>
                   {exercisesStore.exercises.filter((item: IExercise) => item.muscleGroupId === group.id)
                     .map((item: IExercise) => {
@@ -217,8 +215,8 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
                     })
                   }
                 </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
+              </AccordionDetails>
+            </Accordion>
           )
         })}
       </Grid>
