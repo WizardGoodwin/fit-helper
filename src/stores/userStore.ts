@@ -4,7 +4,6 @@ import { AxiosResponse } from 'axios';
 
 import { IUser } from '../models/user.interface';
 import { clearCookies, setCookie } from '../utils/cookie';
-import { IExercise } from '../models/exercise.interface';
 
 class UserStore {
 

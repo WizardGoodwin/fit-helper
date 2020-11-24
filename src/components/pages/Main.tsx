@@ -79,7 +79,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
       muscleGroupsStore.getMuscleGroups();
       exercisesStore.getExercises();
       weekScheduleStore.getWeekSchedule();
-  }, []);
+  }, [exercisesStore, muscleGroupsStore, weekScheduleStore]);
 
   const generateSchedule = () => {
     const generatedSchedule: IWeekSchedule = getRandomSchedule(exercisesStore.exercises, muscleGroupsStore.muscleGroups);

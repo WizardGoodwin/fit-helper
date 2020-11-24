@@ -122,7 +122,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
     userStore.clearState();
     exercisesStore.getExercises();
     muscleGroupsStore.getMuscleGroups();
-  }, []);
+  }, [exercisesStore, muscleGroupsStore, userStore]);
 
   useEffect(() => {
     if (exercisesStore.isDeleted) {
@@ -133,7 +133,7 @@ const ExerciseList: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore', '
         message: 'Упражнение успешно удалено!'
       });
     }
-  }, [exercisesStore.isDeleted]);
+  }, [exercisesStore, exercisesStore.isDeleted]);
 
   const handleChange = (id: number) => (event: ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? id : false);

@@ -82,7 +82,7 @@ const Profile: FC<IProps> = inject('userStore')(
 
   useEffect(() => {
     userStore.getUser();
-  }, []);
+  }, [userStore]);
 
   useEffect(() => {
     setValues(userStore.user);

@@ -12,7 +12,7 @@ import {
   Select,
   TextField,
   Theme,
-  Button, Checkbox, FormControlLabel,
+  Button,
 } from '@material-ui/core';
 
 import { IMuscleGroup } from '../../models/muscle-group.interface';
@@ -93,7 +93,7 @@ const ExerciseForm: FC<IProps> = inject('exercisesStore', 'muscleGroupsStore')(
 
   useEffect(() => {
     muscleGroupsStore!.getMuscleGroups();
-  }, []);
+  }, [muscleGroupsStore]);
 
   const handleChange = (name: keyof typeof values) => (event: ChangeEvent<HTMLInputElement | { name?: string, value: unknown }>) => {
     setValues({

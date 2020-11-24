@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { IReactComponent } from 'mobx-react';
 import axios from '../../utils/axios';
+import { IReactComponent } from 'mobx-react/dist/types/IReactComponent';
 
 import ErrorIndicator from '../../components/shared/ErrorIndicator';
 
